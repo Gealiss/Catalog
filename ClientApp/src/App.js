@@ -1,15 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var react_router_1 = require("react-router");
-var Layout_1 = require("./components/Layout");
-var Home_1 = require("./components/Home");
-var Counter_1 = require("./components/Counter");
-var FetchData_1 = require("./components/FetchData");
-require("./custom.css");
-exports.default = (function () { return (React.createElement(Layout_1.default, null,
-    React.createElement(react_router_1.Route, { exact: true, path: '/', component: Home_1.default }),
-    React.createElement(react_router_1.Route, { path: '/counter', component: Counter_1.default }),
-    React.createElement(react_router_1.Route, { path: '/fetch-data/:startDateIndex?', component: FetchData_1.default }),
-    React.createElement(react_router_1.Route, { path: '/items', component: FetchData_1.default }))); });
+import * as React from 'react';
+import { Route } from 'react-router';
+import Layout from './components/Layout';
+import Counter from './components/Counter';
+import FetchData from './components/FetchData';
+import Catalog from './components/Catalog';
+import Home from './components/Home';
+import './custom.css';
+export default () => (React.createElement(Layout, null,
+    React.createElement(Route, { exact: true, path: '/', component: Home }),
+    React.createElement(Route, { path: '/counter', component: Counter }),
+    React.createElement(Route, { path: '/fetch-data/:startDateIndex?', component: FetchData }),
+    React.createElement(Route, { path: '/catalog', component: Catalog })));
 //# sourceMappingURL=App.js.map

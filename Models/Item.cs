@@ -19,7 +19,7 @@ namespace Catalog.Models
         public string Name { get; set; }
 
         [BsonRequired]
-        public string Category_Name { get; set; }
+        public string Category_name { get; set; }
 
         [MaxLength(200)]
         public string Img { get; set; }

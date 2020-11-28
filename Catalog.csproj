@@ -27,11 +27,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\components\Catalog.tsx" />
+    <None Remove="ClientApp\src\components\Item.tsx" />
     <None Remove="ClientApp\src\store\Items.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\store\Items.ts" />
+    <None Remove="ClientApp\src\store\items\actions.ts" />
+    <None Remove="ClientApp\src\store\items\index.ts" />
+    <None Remove="ClientApp\src\store\items\reducer.ts" />
+    <None Remove="ClientApp\src\store\items\types.ts" />
+    <None Remove="ClientApp\src\store\User.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -4,37 +4,67 @@ import { AppThunkAction } from './';
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
-export interface ItemsState {
+export interface UserState {
     isLoading: boolean;
     startItemIndex?: number;
-    items: Item[];
+    user: User;
 }
 
-export interface Item {
+//{"_id":{"$oid":"5fb00642931071071b720823"},"Name":"John","Username":"john93","Email":null,"Role":"Basic","Favorites":null,"PassHash":"z4p1H/ydiVgvz0p1bWL7M1MsMekiHe3dqv05hmDeYjk=","Salt":"BVvQwznKHQjZTgm767jDOw=="}
+
+export interface User {
     id: string;
     name: string;
-    category_name: string;
-    img: string;
-    description: string;
+    username: string;
+    email?: string;
+    role: string;
+}
+
+export interface LoginModel {
+    username: string;
+    password: string;
+}
+
+export interface RegisterModel {
+    username: string;
+    name: string;
+    email?: string;
+    password: string;
 }
 
 // -----------------
 // ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 
-interface RequestItemsAction {
-    type: 'REQUEST_ITEMS';
-    startItemIndex?: number;
+interface LoginUserAction {
+    type: 'LOGIN_USER';
+    loginData: LoginModel;
 }
-interface ReceiveItemsAction {
-    type: 'RECEIVE_ITEMS';
-    startItemIndex?: number;
-    items: Item[];
+interface RegisterUserAction {
+    type: 'REGISTER_USER';
+    regData: RegisterModel;
+}
+interface SuccessLogin {
+    type: 'SUCCESS_LOGIN_USER';
+    user: User;
+}
+interface SuccessRegistration {
+    type: 'SUCCESS_REGISTRATION_USER';
+    user: User;
+}
+interface FailedLogin {
+    type: 'FAILED_LOGIN_USER';
+    message: string;
+}
+interface FailedRegistration {
+    type: 'FAILED_REGISTRATION_USER';
+    message: string;
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestItemsAction | ReceiveItemsAction;
+type KnownAction = LoginUserAction | RegisterUserAction | SuccessLogin
+    | SuccessRegistration | FailedLogin | FailedRegistration;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.

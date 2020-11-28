@@ -16,10 +16,10 @@ namespace Catalog.Models
         public string Id { get; set; }
         [BsonRequired]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Item_Id { get; set; }
+        public string Item_id { get; set; }
         [BsonRequired]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Shop_Id { get; set; }
+        public string Shop_id { get; set; }
         [BsonDateTimeOptions]
         public DateTime DateTime { get; set; } = DateTime.Now;
         [Range(0.01, 1000000000.0)]
