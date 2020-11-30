@@ -58,10 +58,14 @@ namespace Catalog.Controllers
                 if(user != null)
                 {
                     await Authenticate(user);
-                    return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
-                } else
+                    //return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+
+                    // Cut original user object, so new object doesnt have passHash and salt
+                    return Ok(new UserCut(user));
+                }
+                else
                 {
-                    return Problem(detail: "Such username is not found, or password to this username was wrong.", statusCode: 400);
+                    return BadRequest(new { IncorrectLogin = "Such username is not found, or password to this username was wrong." });
                 }
             }
             return BadRequest(ModelState);

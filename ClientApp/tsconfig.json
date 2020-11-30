@@ -6,8 +6,8 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -16,7 +16,8 @@
       "es2015",
       "dom"
     ],
-    "skipLibCheck": false
+    "skipLibCheck": false,
+    "baseUrl": "."
   },
   "include": [
     "src"

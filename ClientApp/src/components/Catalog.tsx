@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
-import { ApplicationState } from '../store';
+import { ApplicationState } from '../store/index';
 
 //import * as ItemsStore from '../store/Items'
 import { Item, ItemsState } from '../store/items/types';

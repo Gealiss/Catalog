@@ -7,6 +7,7 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,12 +30,15 @@
   <ItemGroup>
     <None Remove="ClientApp\src\components\Catalog.tsx" />
     <None Remove="ClientApp\src\components\Item.tsx" />
+    <None Remove="ClientApp\src\components\Login.tsx" />
     <None Remove="ClientApp\src\store\Items.ts" />
     <None Remove="ClientApp\src\store\items\actions.ts" />
-    <None Remove="ClientApp\src\store\items\index.ts" />
     <None Remove="ClientApp\src\store\items\reducer.ts" />
     <None Remove="ClientApp\src\store\items\types.ts" />
-    <None Remove="ClientApp\src\store\User.ts" />
+    <None Remove="ClientApp\src\store\user\actions.ts" />
+    <None Remove="ClientApp\src\store\user\reducer.ts" />
+    <None Remove="ClientApp\src\store\user\types.ts" />
+    <None Remove="ClientApp\src\utils\apiFetch.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

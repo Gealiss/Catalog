@@ -29,7 +29,9 @@ export default class NavMenu extends React.PureComponent {
                             React.createElement(NavItem, null,
                                 React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/fetch-data" }, "Fetch data")),
                             React.createElement(NavItem, null,
-                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/catalog" }, "Catalog"))))))));
+                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/catalog" }, "Catalog")),
+                            React.createElement(NavItem, null,
+                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/login" }, "Login"))))))));
     }
 }
 //# sourceMappingURL=NavMenu.js.map
