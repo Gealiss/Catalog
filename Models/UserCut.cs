@@ -10,7 +10,7 @@ namespace Catalog.Models
 {
     public class UserCut
     {
-        public UserCut() {  }
+        public UserCut() { }
         public UserCut(User user)
         {
             Id = user.Id;
@@ -19,6 +19,7 @@ namespace Catalog.Models
             Email = user.Email;
             Role = user.Role;
         }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

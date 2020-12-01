@@ -1,6 +1,7 @@
 using Catalog.Models;
 using Catalog.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Catalog
 {
@@ -26,17 +29,46 @@ namespace Catalog
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.Configure<AuthOptions>(Configuration.GetSection(nameof(AuthOptions)));
 
             services.AddSingleton<IDatabaseSettings>(sp => 
                 sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
-            services.AddSingleton<DBService>();
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<AuthOptions>>().Value);
+
+            services.AddSingleton<DBService>(); 
 
             //Auth config
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options => //CookieAuthenticationOptions
+            //    {
+            //        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+            //    });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        // issuer validating too
+                        ValidateIssuer = true,
+                        // publisher
+                        ValidIssuer = Configuration.GetSection(nameof(AuthOptions)).GetValue<string>("JWTIssuer"),
+                        // будет ли валидироваться потребитель токена
+                        ValidateAudience = true,
+                        // установка потребителя токена
+                        ValidAudience = Configuration.GetSection(nameof(AuthOptions)).GetValue<string>("JWTAudience"),
+                        // будет ли валидироваться время существования
+                        ValidateLifetime = true,
+                        // установка ключа безопасности
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration.GetSection(nameof(AuthOptions)).GetValue<string>("JWTSecretKey"))
+                        ),
+                        // валидация ключа безопасности
+                        ValidateIssuerSigningKey = true,
+                    };
                 });
 
             services.AddControllersWithViews();

@@ -9,14 +9,18 @@ export function loginUser(_loginData) {
                 .then((data) => {
                 console.log(data);
                 let _errors = data.errors;
-                let _user = data;
+                let _user = data.user;
+                let _jwt = data.jwt;
                 console.log(_user);
                 if (_errors) {
                     dispatch({ type: UserActionTypes.FAILED_LOGIN_USER, errors: _errors });
                 }
+                else if (_jwt == null) {
+                    dispatch({ type: UserActionTypes.FAILED_LOGIN_USER, errors: null });
+                }
                 else if (_user) {
                     // Current user info will be in localStorage
-                    //localStorage.setItem("user", JSON.stringify(_user));
+                    localStorage.setItem("jwt", JSON.stringify(_jwt));
                     dispatch({ type: UserActionTypes.SUCCESS_LOGIN_USER, user: _user });
                 }
             });

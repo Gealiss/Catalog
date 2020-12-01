@@ -15,3 +15,4 @@ it('renders without crashing', () => {
         React.createElement(MemoryRouter, null,
             React.createElement(App, null))), document.createElement('div'));
 });
+//# sourceMappingURL=App.test.js.map

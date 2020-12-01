@@ -2,12 +2,16 @@
 using Catalog.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,30 +23,31 @@ namespace Catalog.Controllers
     public class AuthController : ControllerBase
     {
         private readonly DBService _dbService;
+        private readonly AuthOptions _authOptions;
 
-        public AuthController(DBService DBService)
+        public AuthController(DBService DBService, AuthOptions authOptions)
         {
             _dbService = DBService;
+            _authOptions = authOptions;
         }
 
         [HttpPost]
         [Route("register")]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterModel model)
+        public ActionResult Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    User user = _dbService.Users.RegisterNew(model);
-                    await Authenticate(user);
-                    return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+                    _dbService.Users.RegisterNew(model);
+                    return Ok();
                 }
                 catch (MongoException e)
                 {
                     return BadRequest(e.Message);
                 }
-                
+
             }
             return BadRequest(ModelState);
         }
@@ -50,18 +55,30 @@ namespace Catalog.Controllers
         [HttpPost]
         [Route("login")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public IActionResult Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
                 User user = _dbService.Users.Login(model);
-                if(user != null)
+                if (user != null)
                 {
-                    await Authenticate(user);
-                    //return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+                    ClaimsIdentity identity = GetIdentity(user);
+
+                    var now = DateTime.UtcNow;
+                    // Create JWT
+                    var jwt = new JwtSecurityToken(
+                            issuer: _authOptions.JWTIssuer,
+                            audience: _authOptions.JWTAudience,
+                            notBefore: now,
+                            claims: identity.Claims,
+                            expires: now.Add(TimeSpan.FromMinutes(_authOptions.JWTLifespan)),
+                            signingCredentials: new SigningCredentials(_authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    
+                    string encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
                     // Cut original user object, so new object doesnt have passHash and salt
-                    return Ok(new UserCut(user));
+                    UserCut userCut = new UserCut(user);
+                    return Ok(new { jwt = encodedJwt, user = userCut });
                 }
                 else
                 {
@@ -71,28 +88,53 @@ namespace Catalog.Controllers
             return BadRequest(ModelState);
         }
 
-        private async Task Authenticate(User user)
+        private ClaimsIdentity GetIdentity(User user)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
+                //new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Username),
                 //new Claim(ClaimsIdentity.DefaultNameClaimType, JsonConvert.SerializeObject(user.Favorites)),
                 //new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
             };
 
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            ClaimsIdentity id = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            return id;
         }
 
+        // TO DELETE
         [HttpGet]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
+        [Route("checkToken")]
+        [Authorize]
+        public IActionResult CheckToken()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            try
+            {
+                // Get JWT token from header and remove "Bearer "
+                string jwt = Request.Headers["Authorization"];
+                jwt = jwt.Remove(0, 7);
+
+                // Deserialize
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(jwt);
+                var tokenS = handler.ReadToken(jwt) as JwtSecurityToken;
+
+                // Get id of this authorized user
+                var userId = tokenS.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
+                // Get this user and return cutted info
+                User user = _dbService.Users.Get(userId);
+                UserCut userCut = new UserCut(user);
+
+                // Re-check this jwt on frontend
+                return Ok(new { jwt = jwt, user = userCut });
+            }
+            catch (Exception e)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

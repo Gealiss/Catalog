@@ -16,3 +16,4 @@ ReactDOM.render(React.createElement(Provider, { store: store },
     React.createElement(ConnectedRouter, { history: history },
         React.createElement(App, null))), document.getElementById('root'));
 registerServiceWorker();
+//# sourceMappingURL=index.js.map
