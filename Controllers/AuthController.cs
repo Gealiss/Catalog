@@ -76,13 +76,21 @@ namespace Catalog.Controllers
                     
                     string encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
+                    // Send cookie with JWT to client
+                    HttpContext.Response.Cookies.Append(".AspNetCore.Service.Id", encodedJwt,
+                        new CookieOptions {
+                            // Same lifetime as JWT have
+                            MaxAge = TimeSpan.FromMinutes(_authOptions.JWTLifespan)
+                    });
+
                     // Cut original user object, so new object doesnt have passHash and salt
                     UserCut userCut = new UserCut(user);
-                    return Ok(new { jwt = encodedJwt, user = userCut });
+                    return Ok(userCut);
                 }
                 else
                 {
-                    return BadRequest(new { IncorrectLogin = "Such username is not found, or password to this username was wrong." });
+                    ModelState.AddModelError("IncorrectLogin", "Such username is not found, or password to this username was wrong.");
+                    return BadRequest(ModelState);
                 }
             }
             return BadRequest(ModelState);
@@ -128,8 +136,7 @@ namespace Catalog.Controllers
                 User user = _dbService.Users.Get(userId);
                 UserCut userCut = new UserCut(user);
 
-                // Re-check this jwt on frontend
-                return Ok(new { jwt = jwt, user = userCut });
+                return Ok(userCut);
             }
             catch (Exception e)
             {

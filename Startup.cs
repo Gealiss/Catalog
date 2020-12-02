@@ -3,7 +3,9 @@ using Catalog.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -71,7 +73,12 @@ namespace Catalog
                     };
                 });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    // disable the automatic 400 behavior
+                    options.SuppressModelStateInvalidFilter = true;
+                });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -99,6 +106,27 @@ namespace Catalog
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always
+            });
+
+            // Attach token from cookie to http request (header Authorization)
+            app.Use(async (context, next) =>
+            {
+                var token = context.Request.Cookies[".AspNetCore.Service.Id"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Request.Headers.Add("Authorization", "Bearer " + token);
+                    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                    context.Response.Headers.Add("X-Xss-Protection", "1");
+                    context.Response.Headers.Add("X-Frame-Options", "DENY");
+                }
+                await next();
+            });
 
             // auth
             app.UseAuthentication();

@@ -19,7 +19,7 @@ interface LoginState {
 export class Login extends React.PureComponent<LoginProps, LoginState> {
     constructor(props : any) {
         super(props);
-        this.state = { username: 'test', password: 'test', submitted: false };
+        this.state = { username: '', password: '', submitted: false };
 
         this.handleLogin = this.handleLogin.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -43,7 +43,8 @@ export class Login extends React.PureComponent<LoginProps, LoginState> {
                 <h2>Login:</h2>
                 <Input type="text" name="username" value={this.state.username} onChange={e => this.handleChange(e)} />
                 <Input type="password" name="password" value={this.state.password} onChange={e => this.handleChange(e)} />
-                <Input type="button" value="Login" onClick={this.handleLogin}/>
+                <Input type="button" value="Login" onClick={this.handleLogin} />
+                {this.props.user != null ? <p>Login Success</p> : null}
             </>
         );
     }

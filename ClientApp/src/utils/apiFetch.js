@@ -25,7 +25,9 @@ export function Post(url = '', data = {}) {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(data) // body data type must match "Content-Type" header
         });
-        return yield response.json(); // parses JSON response into native JavaScript objects
+        let parsedData = yield response.json(); // parses JSON response into native JavaScript objects
+        let res = { isOk: response.ok, status: response.status, data: parsedData };
+        return res;
     });
 }
 //# sourceMappingURL=apiFetch.js.map

@@ -5,7 +5,7 @@ import * as UserActionCreators from '../store/user/actions';
 export class Login extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = { username: 'test', password: 'test', submitted: false };
+        this.state = { username: '', password: '', submitted: false };
         this.handleLogin = this.handleLogin.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -24,7 +24,8 @@ export class Login extends React.PureComponent {
             React.createElement("h2", null, "Login:"),
             React.createElement(Input, { type: "text", name: "username", value: this.state.username, onChange: e => this.handleChange(e) }),
             React.createElement(Input, { type: "password", name: "password", value: this.state.password, onChange: e => this.handleChange(e) }),
-            React.createElement(Input, { type: "button", value: "Login", onClick: this.handleLogin })));
+            React.createElement(Input, { type: "button", value: "Login", onClick: this.handleLogin }),
+            this.props.user != null ? React.createElement("p", null, "Login Success") : null));
     }
 }
 export default connect((state) => state.user, // Selects which state properties are merged into the component's props

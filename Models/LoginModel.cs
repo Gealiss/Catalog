@@ -13,8 +13,8 @@ namespace Catalog.Models
         public string Username { get; set; }
 
         //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")]
         [Required(ErrorMessage = "Password is required.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")]
         public string Password { get; set; }
     }
 }
