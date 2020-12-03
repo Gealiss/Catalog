@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Catalog
 {
@@ -57,19 +58,32 @@ namespace Catalog
                         // issuer validating too
                         ValidateIssuer = true,
                         // publisher
-                        ValidIssuer = Configuration.GetSection(nameof(AuthOptions)).GetValue<string>("JWTIssuer"),
+                        ValidIssuer = Configuration.GetSection(
+                            nameof(AuthOptions)).GetValue<string>("JWTIssuer"),
                         // будет ли валидироваться потребитель токена
                         ValidateAudience = true,
                         // установка потребителя токена
-                        ValidAudience = Configuration.GetSection(nameof(AuthOptions)).GetValue<string>("JWTAudience"),
+                        ValidAudience = Configuration.GetSection(
+                            nameof(AuthOptions)).GetValue<string>("JWTAudience"),
                         // будет ли валидироваться время существования
                         ValidateLifetime = true,
                         // установка ключа безопасности
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration.GetSection(nameof(AuthOptions)).GetValue<string>("JWTSecretKey"))
+                            Encoding.UTF8.GetBytes(Configuration.GetSection(
+                                nameof(AuthOptions)).GetValue<string>("JWTSecretKey"))
                         ),
                         // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        // Delete jwt cookie if auth failed
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.Response.Cookies.Delete(Configuration.GetSection(
+                                nameof(AuthOptions)).GetValue<string>("JWTCookieName"));
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

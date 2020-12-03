@@ -1,7 +1,7 @@
 ﻿import { AppThunkAction } from '../index';
 import { UserLoginErrors, UserActionTypes, KnownAction, LoginModel, LoginErrors } from './types';
 import { alertSuccess, alertError } from '../alert/actions';
-import { Post } from 'src/utils/apiFetch';
+import { Get, Post } from 'src/utils/apiFetch';
 
 // Also make this actions support alert actions 
 import * as AlertTypes from '../alert/types'; 
@@ -33,6 +33,28 @@ export function loginUser(_loginData: LoginModel): AppThunkAction<KnownAction | 
 
             dispatch({ type: UserActionTypes.LOGIN_USER, loginData: _loginData });
         }
+    }
+}
+
+export function checkToken(): AppThunkAction<KnownAction> {
+    return (dispatch, getState) => {
+        Post('auth/checkToken')
+            .then(res => {
+                if (res.isOk) {
+                    dispatch({ type: UserActionTypes.SUCCESS_LOGIN_USER, user: res.data });
+                } else {
+                    dispatch({ type: UserActionTypes.LOGOUT_USER });
+                }
+            });
+    }
+}
+
+export function logoutUser(): AppThunkAction<KnownAction> {
+    return (dispatch, getState) => {
+        Get('auth/logout')
+            .then(res => {
+                    dispatch({ type: UserActionTypes.LOGOUT_USER });
+            });
     }
 }
 

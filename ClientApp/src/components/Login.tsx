@@ -5,6 +5,7 @@ import { ApplicationState } from '../store/index';
 
 import { LoginModel, UserState } from '../store/user/types';
 import * as UserActionCreators from '../store/user/actions';
+import { Redirect } from 'react-router-dom';
 
 type LoginProps =
     UserState // ... state we've requested from the Redux store
@@ -16,7 +17,7 @@ interface LoginState {
     submitted: boolean;
 }
 
-export class Login extends React.PureComponent<LoginProps, LoginState> {
+class Login extends React.PureComponent<LoginProps, LoginState> {
     constructor(props : any) {
         super(props);
         this.state = { username: '', password: '', submitted: false };
@@ -25,19 +26,23 @@ export class Login extends React.PureComponent<LoginProps, LoginState> {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleLogin() {
+    public handleLogin() {
         let loginData: LoginModel = { username: this.state.username, password: this.state.password };
         console.log(loginData);
         this.props.loginUser(loginData);
     }
 
-    handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    public handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         //Change value of edited field only, other state fields are same
         this.setState((state) => ({...state, [name]: value}));
     }
 
-    render() {
+    public render() {
+        // If user already logged in, redirect to home page
+        if (this.props.user) {
+            return <Redirect to="/" />;
+        }
         return (
             <>
                 <h2>Login:</h2>
@@ -53,4 +58,4 @@ export class Login extends React.PureComponent<LoginProps, LoginState> {
 export default connect(
     (state: ApplicationState) => state.user, // Selects which state properties are merged into the component's props
     UserActionCreators // Selects which action creators are merged into the component's props
-)(Login as any);
+)(Login);

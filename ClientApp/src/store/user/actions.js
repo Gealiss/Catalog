@@ -1,6 +1,6 @@
 import { UserLoginErrors, UserActionTypes } from './types';
 import { alertSuccess, alertError } from '../alert/actions';
-import { Post } from 'src/utils/apiFetch';
+import { Get, Post } from 'src/utils/apiFetch';
 export function loginUser(_loginData) {
     return (dispatch, getState) => {
         const appState = getState();
@@ -28,6 +28,27 @@ export function loginUser(_loginData) {
             });
             dispatch({ type: UserActionTypes.LOGIN_USER, loginData: _loginData });
         }
+    };
+}
+export function checkToken() {
+    return (dispatch, getState) => {
+        Post('auth/checkToken')
+            .then(res => {
+            if (res.isOk) {
+                dispatch({ type: UserActionTypes.SUCCESS_LOGIN_USER, user: res.data });
+            }
+            else {
+                dispatch({ type: UserActionTypes.LOGOUT_USER });
+            }
+        });
+    };
+}
+export function logoutUser() {
+    return (dispatch, getState) => {
+        Get('auth/logout')
+            .then(res => {
+            dispatch({ type: UserActionTypes.LOGOUT_USER });
+        });
     };
 }
 // Iterates through each possible field of error response object

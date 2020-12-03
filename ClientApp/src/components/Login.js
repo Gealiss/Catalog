@@ -2,7 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Input } from 'reactstrap';
 import * as UserActionCreators from '../store/user/actions';
-export class Login extends React.PureComponent {
+import { Redirect } from 'react-router-dom';
+class Login extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = { username: '', password: '', submitted: false };
@@ -20,6 +21,10 @@ export class Login extends React.PureComponent {
         this.setState((state) => (Object.assign(Object.assign({}, state), { [name]: value })));
     }
     render() {
+        // If user already logged in, redirect to home page
+        if (this.props.user) {
+            return React.createElement(Redirect, { to: "/" });
+        }
         return (React.createElement(React.Fragment, null,
             React.createElement("h2", null, "Login:"),
             React.createElement(Input, { type: "text", name: "username", value: this.state.username, onChange: e => this.handleChange(e) }),

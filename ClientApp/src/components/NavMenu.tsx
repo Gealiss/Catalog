@@ -2,8 +2,14 @@ import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../store/index';
+import { UserState } from '../store/user/types';
+import * as UserActionCreators from '../store/user/actions';
 
-export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
+type NavMenuProps = UserState & typeof UserActionCreators;
+
+export class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean }> {
     public state = {
         isOpen: false
     };
@@ -20,18 +26,21 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-                                </NavItem>
+
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/catalog">Catalog</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
-                                </NavItem>
+
+                                {this.props.user == null
+                                    ?
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                                    </NavItem>
+                                    :
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/" onClick={() => this.props.logoutUser()}>Logout</NavLink>
+                                    </NavItem>
+                                    }
                             </ul>
                         </Collapse>
                     </Container>
@@ -46,3 +55,8 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
         });
     }
 }
+
+export default connect(
+    (state: ApplicationState) => state.user, // Selects which state properties are merged into the component's props
+    UserActionCreators // Selects which action creators are merged into the component's props
+)(NavMenu as any);

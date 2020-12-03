@@ -2,7 +2,9 @@ import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
-export default class NavMenu extends React.PureComponent {
+import { connect } from 'react-redux';
+import * as UserActionCreators from '../store/user/actions';
+export class NavMenu extends React.PureComponent {
     constructor() {
         super(...arguments);
         this.state = {
@@ -25,13 +27,17 @@ export default class NavMenu extends React.PureComponent {
                             React.createElement(NavItem, null,
                                 React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/" }, "Home")),
                             React.createElement(NavItem, null,
-                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/counter" }, "Counter")),
-                            React.createElement(NavItem, null,
-                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/fetch-data" }, "Fetch data")),
-                            React.createElement(NavItem, null,
                                 React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/catalog" }, "Catalog")),
-                            React.createElement(NavItem, null,
-                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/login" }, "Login"))))))));
+                            this.props.user == null
+                                ?
+                                    React.createElement(NavItem, null,
+                                        React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/login" }, "Login"))
+                                :
+                                    React.createElement(NavItem, null,
+                                        React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/", onClick: () => this.props.logoutUser() }, "Logout"))))))));
     }
 }
+export default connect((state) => state.user, // Selects which state properties are merged into the component's props
+UserActionCreators // Selects which action creators are merged into the component's props
+)(NavMenu);
 //# sourceMappingURL=NavMenu.js.map

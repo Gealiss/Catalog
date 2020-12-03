@@ -6,7 +6,7 @@ export interface UserState {
     user: User | null;
 }
 
-//MODELS
+// MODELS
 
 export interface User {
     id: string;
@@ -69,11 +69,14 @@ interface FailedRegistration {
     type: UserActionTypes.FAILED_REGISTRATION_USER;
     errors: string;
 }
+interface LogoutUserAction {
+    type: UserActionTypes.LOGOUT_USER;
+}
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 export type KnownAction = LoginUserAction | RegisterUserAction | SuccessLogin
-    | SuccessRegistration | FailedLogin | FailedRegistration;
+    | SuccessRegistration | FailedLogin | FailedRegistration | LogoutUserAction;
 
 //ENUM FOR TYPES
 export enum UserActionTypes {
@@ -83,4 +86,5 @@ export enum UserActionTypes {
     SUCCESS_REGISTRATION_USER = "SUCCESS_REGISTRATION_USER",
     FAILED_LOGIN_USER = "FAILED_LOGIN_USER",
     FAILED_REGISTRATION_USER = "FAILED_REGISTRATION_USER",
+    LOGOUT_USER = "LOGOUT_USER"
 }

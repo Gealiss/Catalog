@@ -15,5 +15,6 @@ export var UserActionTypes;
     UserActionTypes["SUCCESS_REGISTRATION_USER"] = "SUCCESS_REGISTRATION_USER";
     UserActionTypes["FAILED_LOGIN_USER"] = "FAILED_LOGIN_USER";
     UserActionTypes["FAILED_REGISTRATION_USER"] = "FAILED_REGISTRATION_USER";
+    UserActionTypes["LOGOUT_USER"] = "LOGOUT_USER";
 })(UserActionTypes || (UserActionTypes = {}));
 //# sourceMappingURL=types.js.map

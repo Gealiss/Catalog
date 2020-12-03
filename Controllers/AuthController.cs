@@ -77,7 +77,7 @@ namespace Catalog.Controllers
                     string encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
                     // Send cookie with JWT to client
-                    HttpContext.Response.Cookies.Append(".AspNetCore.Service.Id", encodedJwt,
+                    HttpContext.Response.Cookies.Append(_authOptions.JWTCookieName, encodedJwt,
                         new CookieOptions {
                             // Same lifetime as JWT have
                             MaxAge = TimeSpan.FromMinutes(_authOptions.JWTLifespan)
@@ -112,8 +112,7 @@ namespace Catalog.Controllers
             return id;
         }
 
-        // TO DELETE
-        [HttpGet]
+        [HttpPost]
         [Route("checkToken")]
         [Authorize]
         public IActionResult CheckToken()
@@ -142,6 +141,15 @@ namespace Catalog.Controllers
             {
                 return Unauthorized();
             }
+        }
+
+        [HttpGet]
+        [Route("logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete(_authOptions.JWTCookieName);
+            return Ok();
         }
     }
 }

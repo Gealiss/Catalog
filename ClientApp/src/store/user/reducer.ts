@@ -27,6 +27,11 @@ export const UserReducer: Reducer<UserState> = (state: UserState | undefined, in
                 user: state.user,
                 isUserLogging: false
             };
+        case UserActionTypes.LOGOUT_USER:
+            return {
+                user: null,
+                isUserLogging: false
+            };
         default:
             return state;
     }

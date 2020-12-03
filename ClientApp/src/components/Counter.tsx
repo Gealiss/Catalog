@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../store';
+import { ApplicationState } from '../store/index';
 import * as CounterStore from '../store/Counter';
 
 type CounterProps =
@@ -10,6 +10,7 @@ type CounterProps =
     RouteComponentProps<{}>;
 
 class Counter extends React.PureComponent<CounterProps> {
+
     public render() {
         return (
             <React.Fragment>
