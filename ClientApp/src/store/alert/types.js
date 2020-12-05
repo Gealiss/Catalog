@@ -1,10 +1,14 @@
 // STATE - This defines the type of data maintained in the Redux store.
+export var AlertMessageTypes;
+(function (AlertMessageTypes) {
+    AlertMessageTypes["success"] = "success";
+    AlertMessageTypes["error"] = "error";
+    AlertMessageTypes["info"] = "info";
+})(AlertMessageTypes || (AlertMessageTypes = {}));
 //ENUM FOR TYPES
 export var AlertActionTypes;
 (function (AlertActionTypes) {
-    AlertActionTypes["ALERT_SUCCESS"] = "ALERT_SUCCESS";
-    AlertActionTypes["ALERT_ERROR"] = "ALERT_ERROR";
-    AlertActionTypes["ALERT_NOTIFICATION"] = "ALERT_NOTIFICATION";
+    AlertActionTypes["ALERT_SHOW"] = "ALERT_SHOW";
     AlertActionTypes["ALERT_CLEAR"] = "ALERT_CLEAR";
 })(AlertActionTypes || (AlertActionTypes = {}));
 //# sourceMappingURL=types.js.map

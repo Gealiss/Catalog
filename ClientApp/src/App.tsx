@@ -12,12 +12,16 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import NavMenu from './components/NavMenu';
+import { AlertBox } from './components/AlertBox';
 
 import * as UserActionCreators from './store/user/actions';
 import { UserState } from './store/user/types';
 import { Container } from 'reactstrap';
+import { AlertState } from './store/alert/types';
 
-type AppProps = UserState & typeof UserActionCreators & React.ReactNode;
+type AppProps = UserState & AlertState &
+    typeof UserActionCreators &
+    React.ReactNode;
 
 export class App extends React.PureComponent<AppProps> {
     public componentDidMount() {
@@ -27,6 +31,7 @@ export class App extends React.PureComponent<AppProps> {
         return (
             <>
                 <NavMenu />
+                <AlertBox alerts={this.props.alerts} />
                 <Container fluid>
                     <Route exact path='/' component={Home} />
                     <Route path='/catalog' component={Catalog} />
@@ -41,6 +46,6 @@ export class App extends React.PureComponent<AppProps> {
 //<Route path='/fetch-data/:startDateIndex?' component={FetchData} />
 
 export default connect(
-    (state: ApplicationState) => state.user, // Selects which state properties are merged into the component's props
+    (state: ApplicationState) => state.user && state.alert, // Selects which state properties are merged into the component's props
     UserActionCreators // Selects which action creators are merged into the component's props
 )(App as any);

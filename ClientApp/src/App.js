@@ -10,6 +10,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import NavMenu from './components/NavMenu';
+import { AlertBox } from './components/AlertBox';
 import * as UserActionCreators from './store/user/actions';
 import { Container } from 'reactstrap';
 export class App extends React.PureComponent {
@@ -19,6 +20,7 @@ export class App extends React.PureComponent {
     render() {
         return (React.createElement(React.Fragment, null,
             React.createElement(NavMenu, null),
+            React.createElement(AlertBox, { alerts: this.props.alerts }),
             React.createElement(Container, { fluid: true },
                 React.createElement(Route, { exact: true, path: '/', component: Home }),
                 React.createElement(Route, { path: '/catalog', component: Catalog }),
@@ -27,7 +29,7 @@ export class App extends React.PureComponent {
     }
 }
 //<Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-export default connect((state) => state.user, // Selects which state properties are merged into the component's props
+export default connect((state) => state.user && state.alert, // Selects which state properties are merged into the component's props
 UserActionCreators // Selects which action creators are merged into the component's props
 )(App);
 //# sourceMappingURL=App.js.map

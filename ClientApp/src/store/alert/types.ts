@@ -7,23 +7,22 @@ export interface AlertState {
 //MODELS
 
 export interface Alert {
+    type: AlertMessageTypes;
     title: string;
-    message: string | null;
+    message: string | string[] | null;
+}
+
+export enum AlertMessageTypes {
+    success = "success",
+    error = "error",
+    info = "info"
 }
 
 // ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 
-interface AlertSuccessAction {
-    type: AlertActionTypes.ALERT_SUCCESS;
-    alerts: Alert[] | null;
-}
-interface AlertErrorAction {
-    type: AlertActionTypes.ALERT_ERROR;
-    alerts: Alert[] | null;
-}
-interface AlertNotificationAction {
-    type: AlertActionTypes.ALERT_NOTIFICATION;
+interface AlertShowAction {
+    type: AlertActionTypes.ALERT_SHOW;
     alerts: Alert[] | null;
 }
 interface AlertClearAction {
@@ -33,13 +32,11 @@ interface AlertClearAction {
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 
-export type KnownAction = AlertSuccessAction | AlertErrorAction | AlertNotificationAction | AlertClearAction;
+export type KnownAction = AlertShowAction | AlertClearAction;
 
 //ENUM FOR TYPES
 
 export enum AlertActionTypes {
-    ALERT_SUCCESS = "ALERT_SUCCESS",
-    ALERT_ERROR = "ALERT_ERROR",
-    ALERT_NOTIFICATION = "ALERT_NOTIFICATION",
+    ALERT_SHOW = "ALERT_SHOW",
     ALERT_CLEAR = "ALERT_CLEAR"
 }

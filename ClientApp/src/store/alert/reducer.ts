@@ -12,15 +12,7 @@ export const AlertReducer: Reducer<AlertState> = (state: AlertState | undefined,
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case AlertActionTypes.ALERT_SUCCESS:
-            return {
-                alerts: action.alerts
-            };
-        case AlertActionTypes.ALERT_ERROR:
-            return {
-                alerts: action.alerts
-            };
-        case AlertActionTypes.ALERT_NOTIFICATION:
+        case AlertActionTypes.ALERT_SHOW:
             return {
                 alerts: action.alerts
             };
