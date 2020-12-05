@@ -3,7 +3,7 @@ import { AlertState, KnownAction, AlertActionTypes } from './types';
 
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: AlertState = { alert: null };
+const unloadedState: AlertState = { alerts: null };
 
 export const AlertReducer: Reducer<AlertState> = (state: AlertState | undefined, incomingAction: Action): AlertState => {
     if (state === undefined) {
@@ -14,19 +14,19 @@ export const AlertReducer: Reducer<AlertState> = (state: AlertState | undefined,
     switch (action.type) {
         case AlertActionTypes.ALERT_SUCCESS:
             return {
-                alert: action.alert
+                alerts: action.alerts
             };
         case AlertActionTypes.ALERT_ERROR:
             return {
-                alert: action.alert
+                alerts: action.alerts
             };
         case AlertActionTypes.ALERT_NOTIFICATION:
             return {
-                alert: action.alert
+                alerts: action.alerts
             };
         case AlertActionTypes.ALERT_CLEAR:
             return {
-                alert: null
+                alerts: null
             };
         default:
             return state;

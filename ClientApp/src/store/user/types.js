@@ -1,11 +1,15 @@
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
-export var UserLoginErrors;
-(function (UserLoginErrors) {
-    UserLoginErrors["IncorrectLogin"] = "Incorrect Login";
-    UserLoginErrors["Password"] = "Incorrect Password";
-    UserLoginErrors["Username"] = "Incorrect Username";
-})(UserLoginErrors || (UserLoginErrors = {}));
+export var UserModelErrors;
+(function (UserModelErrors) {
+    UserModelErrors["IncorrectLogin"] = "Login error";
+    UserModelErrors["IncorrectReg"] = "Registration error";
+    UserModelErrors["Password"] = "Incorrect Password";
+    UserModelErrors["Username"] = "Incorrect Username";
+    UserModelErrors["Name"] = "Incorrect Name";
+    UserModelErrors["ConfirmPassword"] = "Incorrect Confirm Password";
+    UserModelErrors["Email"] = "Incorrect Email";
+})(UserModelErrors || (UserModelErrors = {}));
 //ENUM FOR TYPES
 export var UserActionTypes;
 (function (UserActionTypes) {

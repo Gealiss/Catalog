@@ -17,7 +17,6 @@ namespace Catalog.Models
         public string Name { get; set; }
 
         [EmailAddress]
-        [MinLength(3), MaxLength(100)]
         public string Email { get; set; }
 
         //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number

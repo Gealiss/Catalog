@@ -45,7 +45,8 @@ namespace Catalog.Controllers
                 }
                 catch (MongoException e)
                 {
-                    return BadRequest(e.Message);
+                    ModelState.AddModelError("IncorrectReg", e.Message);
+                    return BadRequest(ModelState);
                 }
 
             }

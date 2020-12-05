@@ -33,9 +33,14 @@ export class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean
 
                                 {this.props.user == null
                                     ?
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
-                                    </NavItem>
+                                    <>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/register">Register</NavLink>
+                                        </NavItem>
+                                    </>
                                     :
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/" onClick={() => this.props.logoutUser()}>Logout</NavLink>

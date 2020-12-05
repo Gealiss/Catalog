@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Input } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import * as UserActionCreators from '../store/user/actions';
 import { Redirect } from 'react-router-dom';
 class Login extends React.PureComponent {
@@ -26,11 +26,14 @@ class Login extends React.PureComponent {
             return React.createElement(Redirect, { to: "/" });
         }
         return (React.createElement(React.Fragment, null,
-            React.createElement("h2", null, "Login:"),
-            React.createElement(Input, { type: "text", name: "username", value: this.state.username, onChange: e => this.handleChange(e) }),
-            React.createElement(Input, { type: "password", name: "password", value: this.state.password, onChange: e => this.handleChange(e) }),
-            React.createElement(Input, { type: "button", value: "Login", onClick: this.handleLogin }),
-            this.props.user != null ? React.createElement("p", null, "Login Success") : null));
+            React.createElement(Row, null,
+                React.createElement(Col, { sm: "12", md: { size: 6, offset: 3 } },
+                    React.createElement("h2", null, "Login:"),
+                    React.createElement(Label, { for: "usernameInput" }, "Username:"),
+                    React.createElement(Input, { type: "text", name: "username", id: "usernameInput", required: true, value: this.state.username, onChange: e => this.handleChange(e) }),
+                    React.createElement(Label, { for: "passwordInput" }, "Password:"),
+                    React.createElement(Input, { type: "password", name: "password", id: "passwordInput", required: true, value: this.state.password, onChange: e => this.handleChange(e) }),
+                    React.createElement(Button, { className: "my-2", type: "button", color: "primary", onClick: this.handleLogin }, "Login")))));
     }
 }
 export default connect((state) => state.user, // Selects which state properties are merged into the component's props

@@ -1,7 +1,7 @@
 ﻿// STATE - This defines the type of data maintained in the Redux store.
 
 export interface AlertState {
-    alert: Alert | null;
+    alerts: Alert[] | null;
 }
 
 //MODELS
@@ -16,15 +16,15 @@ export interface Alert {
 
 interface AlertSuccessAction {
     type: AlertActionTypes.ALERT_SUCCESS;
-    alert: Alert;
+    alerts: Alert[] | null;
 }
 interface AlertErrorAction {
     type: AlertActionTypes.ALERT_ERROR;
-    alert: Alert;
+    alerts: Alert[] | null;
 }
 interface AlertNotificationAction {
     type: AlertActionTypes.ALERT_NOTIFICATION;
-    alert: Alert;
+    alerts: Alert[] | null;
 }
 interface AlertClearAction {
     type: AlertActionTypes.ALERT_CLEAR;

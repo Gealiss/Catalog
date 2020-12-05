@@ -3,7 +3,7 @@ import { UserState, KnownAction, UserActionTypes } from './types';
 
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: UserState = { user: null, isUserLogging: false };
+const unloadedState: UserState = { user: null, isUserLoading: false };
 
 export const UserReducer: Reducer<UserState> = (state: UserState | undefined, incomingAction: Action): UserState => {
     if (state === undefined) {
@@ -15,22 +15,22 @@ export const UserReducer: Reducer<UserState> = (state: UserState | undefined, in
         case UserActionTypes.LOGIN_USER:
             return {
                 user: state.user,
-                isUserLogging: true
+                isUserLoading: true
             };
         case UserActionTypes.SUCCESS_LOGIN_USER:
             return {
                 user: action.user,
-                isUserLogging: false
+                isUserLoading: false
             };
         case UserActionTypes.FAILED_LOGIN_USER:
             return {
                 user: state.user,
-                isUserLogging: false
+                isUserLoading: false
             };
         case UserActionTypes.LOGOUT_USER:
             return {
                 user: null,
-                isUserLogging: false
+                isUserLoading: false
             };
         default:
             return state;

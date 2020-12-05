@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import { Form, Input } from 'reactstrap';
+import { Button, Col, Form, Input, Label, Row } from 'reactstrap';
 import { ApplicationState } from '../store/index';
 
 import { LoginModel, UserState } from '../store/user/types';
@@ -45,11 +45,21 @@ class Login extends React.PureComponent<LoginProps, LoginState> {
         }
         return (
             <>
-                <h2>Login:</h2>
-                <Input type="text" name="username" value={this.state.username} onChange={e => this.handleChange(e)} />
-                <Input type="password" name="password" value={this.state.password} onChange={e => this.handleChange(e)} />
-                <Input type="button" value="Login" onClick={this.handleLogin} />
-                {this.props.user != null ? <p>Login Success</p> : null}
+                <Row>
+                    <Col sm="12" md={{ size: 6, offset: 3 }}>
+                        <h2>Login:</h2>
+
+                        <Label for="usernameInput">Username:</Label>
+                        <Input type="text" name="username" id="usernameInput" required
+                            value={this.state.username} onChange={e => this.handleChange(e)} />
+
+                        <Label for="passwordInput">Password:</Label>
+                        <Input type="password" name="password" id="passwordInput" required
+                            value={this.state.password} onChange={e => this.handleChange(e)} />
+
+                        <Button className="my-2" type="button" color="primary" onClick={this.handleLogin}>Login</Button>
+                    </Col>
+                </Row>
             </>
         );
     }

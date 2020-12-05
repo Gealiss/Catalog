@@ -2,7 +2,7 @@
 // STATE - This defines the type of data maintained in the Redux store.
 
 export interface UserState {
-    isUserLogging: boolean;
+    isUserLoading: boolean;
     user: User | null;
 }
 
@@ -22,16 +22,14 @@ export interface LoginModel {
     password: string;
 }
 
-export interface LoginErrors {
-    incorrectLogin?: string;
-    Password?: string[];
-    Username?: string[];
-}
-
-export enum UserLoginErrors {
-    IncorrectLogin = "Incorrect Login",
+export enum UserModelErrors {
+    IncorrectLogin = "Login error",
+    IncorrectReg = "Registration error",
     Password = "Incorrect Password",
-    Username = "Incorrect Username"
+    Username = "Incorrect Username",
+    Name = "Incorrect Name",
+    ConfirmPassword = "Incorrect Confirm Password",
+    Email = "Incorrect Email"
 }
 
 export interface RegisterModel {
@@ -39,6 +37,7 @@ export interface RegisterModel {
     name: string;
     email?: string;
     password: string;
+    confirmPassword: string;
 }
 
 // -----------------
@@ -59,15 +58,12 @@ interface SuccessLogin {
 }
 interface SuccessRegistration {
     type: UserActionTypes.SUCCESS_REGISTRATION_USER;
-    user: User;
 }
 interface FailedLogin {
     type: UserActionTypes.FAILED_LOGIN_USER;
-    errors: LoginErrors;
 }
 interface FailedRegistration {
     type: UserActionTypes.FAILED_REGISTRATION_USER;
-    errors: string;
 }
 interface LogoutUserAction {
     type: UserActionTypes.LOGOUT_USER;

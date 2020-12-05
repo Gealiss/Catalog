@@ -1,17 +1,17 @@
-﻿import { AlertActionTypes } from './types';
+﻿import { Alert, AlertActionTypes } from './types';
 
 // Not standart action functions, their return objects need to be dispatched from other actions
 
-export function alertSuccess(title: string, message : string | null) {
-    return { type: AlertActionTypes.ALERT_SUCCESS, alert: { title: title, message: message } };
+export function alertSuccess(alerts: Alert[] | null) {
+    return { type: AlertActionTypes.ALERT_SUCCESS, alerts: alerts };
 }
 
-export function alertError(title: string, message: string | null) {
-    return { type: AlertActionTypes.ALERT_ERROR, alert: { title: title, message: message } };
+export function alertError(alerts: Alert[] | null) {
+    return { type: AlertActionTypes.ALERT_ERROR, alerts: alerts };
 }
 
-export function alertNotification(title: string, message: string | null) {
-    return { type: AlertActionTypes.ALERT_NOTIFICATION, alert: { title: title, message: message } };
+export function alertNotification(alerts: Alert[] | null) {
+    return { type: AlertActionTypes.ALERT_NOTIFICATION, alerts: alerts };
 }
 
 export function alertClear() {
