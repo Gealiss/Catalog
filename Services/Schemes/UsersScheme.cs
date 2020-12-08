@@ -78,5 +78,32 @@ namespace Catalog.Services.Schemes
             }
             return null;
         }
+
+        /// <summary>
+        /// Check if provided Username is unique.
+        /// </summary>
+        /// <param name="username">Provided username</param>
+        /// <returns>True: if Username is unique.</returns>
+        public bool IsUsernameUnique(string username)
+        {
+            if(users.Find(user => user.Username == username).FirstOrDefault() != null)
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// Check if provided Email is unique.
+        /// </summary>
+        /// <param name="email">Provided email</param>
+        /// <returns>True: if Email is unique.</returns>
+        public bool IsEmailUnique(string email)
+        {
+            if (users.Find(user => user.Email == email).FirstOrDefault() != null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

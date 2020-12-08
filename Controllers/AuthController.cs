@@ -38,6 +38,18 @@ namespace Catalog.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if Username and Email are unique
+                if (!_dbService.Users.IsUsernameUnique(model.Username))
+                {
+                    ModelState.AddModelError("IncorrectReg", "Such username is already exists.");
+                    return BadRequest(ModelState);
+                }
+                if (model.Email != null && !_dbService.Users.IsEmailUnique(model.Email))
+                {
+                    ModelState.AddModelError("IncorrectReg", "This email is already registered.");
+                    return BadRequest(ModelState);
+                }
+                // Try register user
                 try
                 {
                     _dbService.Users.RegisterNew(model);
@@ -138,7 +150,7 @@ namespace Catalog.Controllers
 
                 return Ok(userCut);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Unauthorized();
             }

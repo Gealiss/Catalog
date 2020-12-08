@@ -14,11 +14,12 @@ namespace Catalog.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonRequired]
-        [MinLength(3), MaxLength(50)]
+        [Required]
+        [RegularExpression(@"^[\w][\w ]{2,49}$")]
         public string Name { get; set; }
 
-        [BsonRequired]
+        [Required]
+        [RegularExpression(@"^[\w]{3,30}$")]
         public string Category_name { get; set; }
 
         [MaxLength(200)]

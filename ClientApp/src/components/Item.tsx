@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import * as ItemsStore from '../store/Items';
+import * as ItemsStore from '../store/items/types';
 
 interface ItemProviderProps {
     item: ItemsStore.Item;
@@ -11,7 +11,8 @@ interface ItemProviderProps {
 
 export class ItemComponent extends React.Component<ItemProviderProps> {
     render() {
-        let img: string = this.props.item.img == null ? "/roflan.png" : this.props.item.img;
+        let img: string = this.props.item.img == null || this.props.item.img === ''
+            ? "/roflan.png" : this.props.item.img;
         return (
             <>
                 <div className="col mb-3">

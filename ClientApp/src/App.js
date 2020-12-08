@@ -11,6 +11,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import NavMenu from './components/NavMenu';
 import { AlertBox } from './components/AlertBox';
+import AdminPanel from './components/AdminPanel';
 import * as UserActionCreators from './store/user/actions';
 import { Container } from 'reactstrap';
 export class App extends React.PureComponent {
@@ -25,7 +26,8 @@ export class App extends React.PureComponent {
                 React.createElement(Route, { exact: true, path: '/', component: Home }),
                 React.createElement(Route, { path: '/catalog', component: Catalog }),
                 React.createElement(Route, { path: '/login', component: Login }),
-                React.createElement(Route, { path: '/register', component: Register }))));
+                React.createElement(Route, { path: '/register', component: Register }),
+                React.createElement(Route, { path: '/admin', component: AdminPanel }))));
     }
 }
 //<Route path='/fetch-data/:startDateIndex?' component={FetchData} />

@@ -4,7 +4,8 @@ import * as React from 'react';
 //}
 export class ItemComponent extends React.Component {
     render() {
-        let img = this.props.item.img == null ? "/roflan.png" : this.props.item.img;
+        let img = this.props.item.img == null || this.props.item.img === ''
+            ? "/roflan.png" : this.props.item.img;
         return (React.createElement(React.Fragment, null,
             React.createElement("div", { className: "col mb-3" },
                 React.createElement("div", { className: "card h-100", id: this.props.item.id },

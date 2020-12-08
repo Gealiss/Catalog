@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Spinner } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../store/index';
-import { UserState } from '../store/user/types';
+import { UserState, UserRoles } from '../store/user/types';
 import * as UserActionCreators from '../store/user/actions';
 
 type NavMenuProps = UserState & typeof UserActionCreators;
@@ -31,6 +31,16 @@ export class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean
                                     <NavLink tag={Link} className="text-dark" to="/catalog">Catalog</NavLink>
                                 </NavItem>
 
+                                {
+                                    this.props.user?.role == UserRoles.Admin
+                                        ?
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/admin">Admin Panel</NavLink>
+                                        </NavItem>
+                                        :
+                                        null
+                                }
+                                
                                 {this.props.user == null
                                     ?
                                     <>
@@ -45,7 +55,14 @@ export class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/" onClick={() => this.props.logoutUser()}>Logout</NavLink>
                                     </NavItem>
-                                    }
+                                }
+                                {
+                                    this.props.isUserLoading
+                                        ?
+                                        <Spinner color="dark" />
+                                        :
+                                        null
+                                }
                             </ul>
                         </Collapse>
                     </Container>

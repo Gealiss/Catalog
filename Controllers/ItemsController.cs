@@ -42,25 +42,41 @@ namespace Catalog.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult<Item> Create(Item item)
         {
-            _dbService.Items.Create(item);
-
-            return CreatedAtRoute("GetItem", new { id = item.Id.ToString() }, item);
+            if (ModelState.IsValid)
+            {
+                if (_dbService.Categories.Get(item.Category_name) == null)
+                {
+                    ModelState.AddModelError("Category_name", "Such category does not exist.");
+                    return BadRequest(ModelState);
+                }
+                _dbService.Items.Create(item);
+                return CreatedAtRoute("GetItem", new { id = item.Id.ToString() }, item);
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPut("{id:length(24)}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Update(string id, Item itemIn)
         {
-            var item = _dbService.Items.Get(id);
-
-            if (item == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                if (_dbService.Categories.Get(itemIn.Category_name) == null)
+                {
+                    ModelState.AddModelError("Category_name", "Such category does not exist.");
+                    return BadRequest(ModelState);
+                }
+                Item item = _dbService.Items.Get(id);
+
+                if (item == null)
+                {
+                    return NotFound();
+                }
+                _dbService.Items.Update(id, itemIn);
+
+                return NoContent();
             }
-
-            _dbService.Items.Update(id, itemIn);
-
-            return NoContent();
+            return BadRequest(ModelState);
         }
 
         [HttpDelete("{id:length(24)}")]

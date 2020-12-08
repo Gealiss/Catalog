@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button, Col, Form, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { ApplicationState } from '../store/index';
 
 import { LoginModel, UserState } from '../store/user/types';

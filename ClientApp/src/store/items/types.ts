@@ -11,8 +11,13 @@ export interface Item {
     id: string;
     name: string;
     category_name: string;
-    img: string;
-    description: string;
+    img?: string;
+    description?: string;
+}
+
+export enum ItemModelErrors {
+    Category_name = "Incorrect category name",
+    Name = "Incorrect name"
 }
 
 // -----------------
@@ -28,13 +33,18 @@ interface ReceiveItemsAction {
     startItemIndex?: number;
     items: Item[];
 }
+interface CreateItemAction {
+    type: ItemActionTypes.CREATE_ITEM;
+}
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-export type KnownAction = RequestItemsAction | ReceiveItemsAction;
+export type KnownAction = RequestItemsAction | ReceiveItemsAction
+    | CreateItemAction;
 
 //ENUM FOR TYPES
 export enum ItemActionTypes {
     REQUEST_ITEMS = "REQUEST_ITEMS",
-    RECEIVE_ITEMS = "RECEIVE_ITEMS"
+    RECEIVE_ITEMS = "RECEIVE_ITEMS",
+    CREATE_ITEM = "CREATE_ITEM"
 }

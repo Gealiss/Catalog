@@ -1,5 +1,10 @@
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
+export var UserRoles;
+(function (UserRoles) {
+    UserRoles["Basic"] = "Basic";
+    UserRoles["Admin"] = "Admin";
+})(UserRoles || (UserRoles = {}));
 export var UserModelErrors;
 (function (UserModelErrors) {
     UserModelErrors["IncorrectLogin"] = "Login error";

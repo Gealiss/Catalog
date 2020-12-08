@@ -17,6 +17,11 @@ export interface User {
     email?: string;
 }
 
+export enum UserRoles {
+    Basic = "Basic",
+    Admin = "Admin"
+}
+
 export interface LoginModel {
     username: string;
     password: string;

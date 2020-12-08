@@ -32,6 +32,22 @@ export const UserReducer: Reducer<UserState> = (state: UserState | undefined, in
                 user: null,
                 isUserLoading: false
             };
+        // Registration does not set user object in state
+        case UserActionTypes.REGISTER_USER:
+            return {
+                user: null,
+                isUserLoading: true
+            };
+        case UserActionTypes.SUCCESS_REGISTRATION_USER:
+            return {
+                user: null,
+                isUserLoading: false
+            };
+        case UserActionTypes.FAILED_REGISTRATION_USER:
+            return {
+                user: null,
+                isUserLoading: false
+            };
         default:
             return state;
     }

@@ -13,6 +13,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import NavMenu from './components/NavMenu';
 import { AlertBox } from './components/AlertBox';
+import AdminPanel from './components/AdminPanel';
 
 import * as UserActionCreators from './store/user/actions';
 import { UserState } from './store/user/types';
@@ -37,6 +38,7 @@ export class App extends React.PureComponent<AppProps> {
                     <Route path='/catalog' component={Catalog} />
                     <Route path='/login' component={Login} />
                     <Route path='/register' component={Register} />
+                    <Route path='/admin' component={AdminPanel} />
                 </Container>
             </>
         );
