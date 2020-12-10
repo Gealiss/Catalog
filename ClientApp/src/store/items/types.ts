@@ -15,6 +15,14 @@ export interface Item {
     description?: string;
 }
 
+export interface ItemPrice {
+    item_id: string;
+    shop: string;
+    dateTime: string;
+    price: number;
+    availability: boolean;
+}
+
 export enum ItemModelErrors {
     Category_name = "Incorrect category name",
     Name = "Incorrect name"

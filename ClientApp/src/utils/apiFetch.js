@@ -21,7 +21,12 @@ export function Get(url = '') {
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
         });
-        let res = { isOk: response.ok, status: response.status, url: response.url };
+        let parsedData = null;
+        try {
+            parsedData = yield response.json(); // parses JSON response into native JavaScript objects
+        }
+        catch (e) { }
+        let res = { isOk: response.ok, status: response.status, url: response.url, data: parsedData };
         return res;
     });
 }
@@ -41,7 +46,7 @@ export function Post(url = '', data = {}) {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(data) // body data type must match "Content-Type" header
         });
-        let parsedData = {};
+        let parsedData = null;
         try {
             parsedData = yield response.json(); // parses JSON response into native JavaScript objects
         }

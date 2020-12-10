@@ -6,12 +6,6 @@ import { AddItemModal } from './modals/AddItemModal';
 
 import { ApplicationState } from '../store/index';
 import { UserState, UserRoles } from '../store/user/types';
-import { Item } from '../store/items/types';
-
-interface AdminPanelState {
-    isActionPending: boolean;
-    item: Item
-}
 
 type AdminPanelProps = UserState; // ... state we've requested from the Redux store
 

@@ -38,6 +38,53 @@ namespace Catalog.Controllers
             return price;
         }
 
+        [HttpGet("minPrice/{itemId:length(24)}")]
+        public ActionResult<PriceInfo> GetMinPrice(string itemId)
+        {
+            if(itemId == null)
+            {
+                return BadRequest();
+            }
+            // Get the newest price for this item in each shop, that sells it
+            var shops = _dbService.Shops.Get();
+            var prices = _dbService.PriceHistory.GetPrices(itemId, shops);
+
+            // If count = 0 - no prices for this item was found on provided shops
+            if (prices.Count == 0)
+            {
+                return NotFound();
+            }
+
+            // Get lowest price among all shops where in stock
+            prices = prices.OrderBy(price => price.Price).ToList();
+            var price = prices.FirstOrDefault(price => price.Availability == true);
+            
+            // If item is not in stock
+            if(price == null)
+            {
+                price = prices.First();
+            }
+
+            return price;
+        }
+
+        [HttpGet("prices/{itemId:length(24)}")]
+        public ActionResult<List<PriceInfo>> GetPrices(string itemId)
+        {
+            // Get the newest price for this item in each shop, that sells it
+            var shops =_dbService.Shops.Get();
+            // Available items first
+            var prices = _dbService.PriceHistory.GetPrices(itemId, shops)
+                .OrderBy(price => price.Availability).ToList();
+
+            if (prices.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return prices;
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public ActionResult<PriceHistory> Create(PriceHistory price)

@@ -4,6 +4,7 @@ import { alertShow } from '../alert/actions';
 import { Get, Post } from 'src/utils/apiFetch';
 import * as AlertTypes from '../alert/types';
 
+// Load all items
 export function requestItems(): AppThunkAction<KnownAction> {
     return (dispatch, getState) => {
         const appState = getState();

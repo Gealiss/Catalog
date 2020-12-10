@@ -34,6 +34,7 @@
     <None Remove="ClientApp\src\components\AlertItem.tsx" />
     <None Remove="ClientApp\src\components\Catalog.tsx" />
     <None Remove="ClientApp\src\components\Item.tsx" />
+    <None Remove="ClientApp\src\components\ItemPage.tsx" />
     <None Remove="ClientApp\src\components\Login.tsx" />
     <None Remove="ClientApp\src\components\modals\AddItemModal.tsx" />
     <None Remove="ClientApp\src\components\Register.tsx" />

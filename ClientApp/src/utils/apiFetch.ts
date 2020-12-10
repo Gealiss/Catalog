@@ -10,9 +10,14 @@ export async function Get(url = '') {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *client
+        referrerPolicy: 'no-referrer', // no-referrer, *client,
     });
-    let res = { isOk: response.ok, status: response.status, url: response.url };
+    let parsedData = null;
+    try {
+        parsedData = await response.json(); // parses JSON response into native JavaScript objects
+    } catch (e) { }
+
+    let res = { isOk: response.ok, status: response.status, url: response.url, data: parsedData };
     return res;
 }
 

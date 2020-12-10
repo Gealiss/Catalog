@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,22 +8,18 @@ using System.Threading.Tasks;
 
 namespace Catalog.Models
 {
-    public class PriceHistory
+    public class PriceInfo
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-        [BsonRequired]
+        [Required]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Item_id { get; set; }
-        [BsonRequired]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Shop_id { get; set; }
+        [Required]
+        public string Shop { get; set; }
         [BsonDateTimeOptions]
-        public DateTime DateTime { get; set; } = DateTime.Now;
+        public DateTime DateTime { get; set; }
         [Range(0.01, 1000000000.0)]
         public double Price { get; set; }
-        [BsonRequired]
+        [Required]
         public bool Availability { get; set; }
     }
 }

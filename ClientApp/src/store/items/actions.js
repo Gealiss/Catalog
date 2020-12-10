@@ -1,5 +1,6 @@
 import { ItemActionTypes, ItemModelErrors } from './types';
 import * as AlertTypes from '../alert/types';
+// Load all items
 export function requestItems() {
     return (dispatch, getState) => {
         const appState = getState();
