@@ -12,7 +12,9 @@ class UpdateItemModal extends React.Component {
             alerts: null,
             isActionPending: false,
             isOpened: false,
-            id: '', name: '', category_name: '', description: '', img: ''
+            item: {
+                id: '', name: '', category_name: '', description: '', img: ''
+            }
         };
         this.toggle = this.toggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -27,37 +29,31 @@ class UpdateItemModal extends React.Component {
     handleChange(e) {
         const { name, value } = e.target;
         //Change value of edited field only, other state fields are same
-        this.setState((state) => (Object.assign(Object.assign({}, state), { [name]: value })));
+        this.setState((state) => (Object.assign(Object.assign({}, state), { item: Object.assign(Object.assign({}, state.item), { [name]: value }) })));
     }
     handleSubmit() {
         // Check if item id is 24 chars length
-        if (this.state.id.length != 24) {
+        if (this.state.item.id.length != 24) {
             alert("Item id must be exactly 24 chars long.");
             return;
         }
-        let item = {
-            id: this.state.id,
-            name: this.state.name,
-            category_name: this.state.category_name,
-            description: this.state.description === '' ? undefined : this.state.description,
-            img: this.state.img === '' ? undefined : this.state.img
-        };
+        let item = this.state.item;
         this.updateItem(item);
     }
     loadItem() {
-        // If items is still loading or loaded, but empty
+        // If items is still loading, or loaded, but empty
         if (this.props.isLoading || this.props.items.length == 0) {
             alert("No items, or still loading.");
             return;
         }
         // Search item in global state by id from state
-        let item = this.props.items.find(item => item.id == this.state.id);
+        let item = this.props.items.find(item => item.id == this.state.item.id);
         if (!item) {
             alert("No item was found.");
             return;
         }
         // Set found item to state
-        this.setState(state => (Object.assign(Object.assign({}, state), { name: (item === null || item === void 0 ? void 0 : item.name) ? item.name : '', category_name: (item === null || item === void 0 ? void 0 : item.category_name) ? item.category_name : '', description: (item === null || item === void 0 ? void 0 : item.description) ? item.description : '', img: (item === null || item === void 0 ? void 0 : item.img) ? item.img : '' })));
+        this.setState(state => (Object.assign(Object.assign({}, state), { item: item })));
     }
     render() {
         return (React.createElement("div", null,
@@ -71,17 +67,20 @@ class UpdateItemModal extends React.Component {
                         :
                             null,
                     React.createElement(InputGroup, null,
-                        React.createElement(Input, { type: "text", name: "id", id: "itemIdInput", required: true, placeholder: "24 char string", value: this.state.id, onChange: e => this.handleChange(e) }),
+                        React.createElement(Input, { type: "text", name: "id", id: "itemIdInput", required: true, placeholder: "24 char string", value: this.state.item.id, onChange: e => this.handleChange(e) }),
                         React.createElement(InputGroupAddon, { addonType: "prepend" },
                             React.createElement(Button, { onClick: this.loadItem }, "Find by id"))),
                     React.createElement(Label, { for: "itemNameInput" }, "Item name:"),
-                    React.createElement(Input, { type: "text", name: "name", id: "itemNameInput", required: true, value: this.state.name, onChange: e => this.handleChange(e) }),
+                    React.createElement(Input, { type: "text", name: "name", id: "itemNameInput", required: true, value: this.state.item.name, onChange: e => this.handleChange(e) }),
                     React.createElement(Label, { for: "itemCategoryInput" }, "Item category:"),
-                    React.createElement(Input, { type: "text", name: "category_name", id: "itemCategoryInput", required: true, value: this.state.category_name, onChange: e => this.handleChange(e) }),
+                    React.createElement(Input, { type: "select", name: "category_name", id: "itemCategoryInput", value: this.state.item.category_name, onChange: e => this.handleChange(e) },
+                        React.createElement("option", { value: '' }, "Select category..."),
+                        ")",
+                        this.props.categories.map((category, i) => React.createElement("option", { key: i, value: category.name }, category.name))),
                     React.createElement(Label, { for: "itemDescriptionInput" }, "Item description:"),
-                    React.createElement(Input, { type: "text", name: "description", id: "itemDescriptionInput", value: this.state.description, onChange: e => this.handleChange(e) }),
+                    React.createElement(Input, { type: "text", name: "description", id: "itemDescriptionInput", value: this.state.item.description, onChange: e => this.handleChange(e) }),
                     React.createElement(Label, { for: "itemImgInput" }, "Item image URL:"),
-                    React.createElement(Input, { type: "text", name: "img", id: "itemImgInput", value: this.state.img, onChange: e => this.handleChange(e) })),
+                    React.createElement(Input, { type: "text", name: "img", id: "itemImgInput", value: this.state.item.img, onChange: e => this.handleChange(e) })),
                 React.createElement(ModalFooter, null,
                     this.state.isActionPending ? React.createElement(Spinner, { size: "sm", color: "primary" }) : null,
                     React.createElement(Button, { color: "danger", onClick: this.deleteItem }, "Delete"),
@@ -90,16 +89,16 @@ class UpdateItemModal extends React.Component {
     }
     deleteItem() {
         // Check if item id is 24 chars length
-        if (this.state.id.length != 24) {
+        if (this.state.item.id.length != 24) {
             alert("Item id must be exactly 24 chars long.");
             return;
         }
         this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: true })));
-        Delete(`api/items/${this.state.id}`)
+        Delete(`api/items/${this.state.item.id}`)
             .then(res => {
             this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: false })));
             if (res.isOk) {
-                alert(`Item was deleted ${this.state.name}, id: ${this.state.id}`);
+                alert(`Item was deleted ${this.state.item.name}, id: ${this.state.item.id}`);
                 this.setState(state => (Object.assign(Object.assign({}, state), { isOpened: false, alerts: null })));
             }
             else if (res.status == 400) {
@@ -129,7 +128,7 @@ class UpdateItemModal extends React.Component {
     }
     updateItem(item) {
         this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: true })));
-        Put(`api/items/${this.state.id}`, item)
+        Put(`api/items/${this.state.item.id}`, item)
             .then(res => {
             this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: false })));
             if (res.isOk) {
@@ -162,5 +161,5 @@ class UpdateItemModal extends React.Component {
         });
     }
 }
-export default connect((state) => state.items)(UpdateItemModal);
+export default connect((state) => (Object.assign(Object.assign({}, state.items), state.categories)))(UpdateItemModal);
 //# sourceMappingURL=UpdateItemModal.js.map
