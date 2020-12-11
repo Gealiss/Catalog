@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Spinner, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Spinner, Alert, InputGroup, InputGroupAddon } from 'reactstrap';
 import { AlertItem } from '../AlertItem';
 
 import { ApplicationState } from 'src/store/index';
@@ -13,7 +13,11 @@ interface UpdateItemModalState {
     isActionPending: boolean;
     isOpened: boolean;
     alerts: AlertTypes.Alert[] | null;
-    item: Item;
+    id: string;
+    name: string;
+    category_name: string;
+    description: string;
+    img: string;
 }
 
 class UpdateItemModal extends React.Component<ItemsState, UpdateItemModalState> {
@@ -24,9 +28,7 @@ class UpdateItemModal extends React.Component<ItemsState, UpdateItemModalState> 
             alerts: null,
             isActionPending: false,
             isOpened: false,
-            item: {
-                id: '', name: '', category_name: '', description: '', img: ''
-            }            
+            id: '', name: '', category_name: '', description: '', img: ''
         }
         this.toggle = this.toggle.bind(this);
         this.handleChange = this.handleChange.bind(this);

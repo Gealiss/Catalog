@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Card, CardBody, CardSubtitle, CardTitle, Col, Row } from 'reactstrap';
+import { Card, CardBody, CardSubtitle, CardTitle, Col, Row } from 'reactstrap';
 import { AddItemModal } from './modals/AddItemModal';
+import { AddCategoryModal } from './modals/AddCategoryModal';
+import { AddShopModal } from './modals/AddShopModal';
 import UpdateItemModal from './modals/UpdateItemModal';
 import AddPriceModal from './modals/AddPriceModal';
 import { UserRoles } from '../store/user/types';
@@ -32,13 +34,13 @@ class AdminPanel extends React.Component {
                         React.createElement(CardBody, null,
                             React.createElement(CardTitle, { tag: "h5" }, "Shops"),
                             React.createElement(CardSubtitle, { tag: "h6", className: "mb-2 text-muted" }, "Shops manage."),
-                            React.createElement(Button, { color: "primary" }, "Add")))),
+                            React.createElement(AddShopModal, null)))),
                 React.createElement(Col, null,
                     React.createElement(Card, null,
                         React.createElement(CardBody, null,
                             React.createElement(CardTitle, { tag: "h5" }, "Category"),
                             React.createElement(CardSubtitle, { tag: "h6", className: "mb-2 text-muted" }, "Category manage."),
-                            React.createElement(Button, { color: "primary" }, "Add")))))));
+                            React.createElement(AddCategoryModal, null)))))));
     }
 }
 export default connect((state) => state.user)(AdminPanel);

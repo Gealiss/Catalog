@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Button, ButtonGroup, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Col, Row } from 'reactstrap';
 
 import { AddItemModal } from './modals/AddItemModal';
+import { AddCategoryModal } from './modals/AddCategoryModal';
+import { AddShopModal } from './modals/AddShopModal';
 import UpdateItemModal from './modals/UpdateItemModal';
 import AddPriceModal from './modals/AddPriceModal';
 
@@ -24,41 +26,44 @@ class AdminPanel extends React.Component<AdminPanelProps> {
         }
         return (
                 <>
-                    <h1>Admin panel</h1>
-                    <Row className="row-cols-1 row-cols-sm-3 row-cols-lg-4 row-cols-xl-5">
-                        <Col>
-                            <Card>
-                                <CardBody>
-                                    <CardTitle tag="h5">Items</CardTitle>
+                <h1>Admin panel</h1>
+                <Row className="row-cols-1 row-cols-sm-3 row-cols-lg-4 row-cols-xl-5">
+                    <Col>
+                        <Card>
+                            <CardBody>
+                                <CardTitle tag="h5">Items</CardTitle>
                                 <CardSubtitle tag="h6" className="mb-2 text-muted">Items manage.</CardSubtitle>
 
                                 <AddItemModal />
                                 <UpdateItemModal />
                                 <AddPriceModal />
+                            </CardBody>
+                        </Card>
+                    </Col>
 
-                                </CardBody>
-                            </Card>
-                        </Col>
+                    <Col>
+                        <Card>
+                        <CardBody>
+                            <CardTitle tag="h5">Shops</CardTitle>
+                                <CardSubtitle tag="h6" className="mb-2 text-muted">Shops manage.</CardSubtitle>
 
-                        <Col>
-                            <Card>
-                                <CardBody>
-                                    <CardTitle tag="h5">Shops</CardTitle>
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted">Shops manage.</CardSubtitle>
-                                    <Button color="primary">Add</Button>
-                                </CardBody>
-                            </Card>
-                        </Col>
+                                <AddShopModal />
 
-                        <Col>
-                            <Card>
-                                <CardBody>
-                                    <CardTitle tag="h5">Category</CardTitle>
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted">Category manage.</CardSubtitle>
-                                    <Button color="primary">Add</Button>
-                                </CardBody>
-                            </Card>
-                        </Col>
+                            </CardBody>
+                        </Card>
+                    </Col>
+
+                    <Col>
+                        <Card>
+                            <CardBody>
+                                <CardTitle tag="h5">Category</CardTitle>
+                                <CardSubtitle tag="h6" className="mb-2 text-muted">Category manage.</CardSubtitle>
+
+                                <AddCategoryModal />
+
+                            </CardBody>
+                        </Card>
+                    </Col>
 
                     </Row>
                 </>
