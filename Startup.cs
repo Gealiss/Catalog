@@ -1,6 +1,5 @@
 using Catalog.Models;
 using Catalog.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -92,7 +91,7 @@ namespace Catalog
                 {
                     // disable the automatic 400 behavior
                     options.SuppressModelStateInvalidFilter = true;
-                });
+                }).AddNewtonsoftJson();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
