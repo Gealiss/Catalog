@@ -30,7 +30,7 @@ export function loginUser(_loginData: LoginModel): AppThunkAction<KnownAction | 
                             dispatch(alertShow(alerts));
                         } else {
                             // Push unpredicted error alert
-                            alerts.push({ type: AlertTypes.AlertMessageTypes.error, title: "Error " + res.status, message: "Some error occured." });
+                            alerts.push({ type: AlertTypes.AlertMessageTypes.error, title: "Error " + res.status, message: ["Some error occured."] });
                             dispatch(alertShow(alerts));
                         }
                         dispatch({ type: UserActionTypes.FAILED_LOGIN_USER })
@@ -65,7 +65,7 @@ export function registerUser(_regData: RegisterModel): AppThunkAction<KnownActio
                             dispatch(alertShow(alerts));
                         } else {
                             // Push unpredicted error alert
-                            alerts.push({ type: AlertTypes.AlertMessageTypes.error, title: "Error " + res.status, message: "Some error occured." });
+                            alerts.push({ type: AlertTypes.AlertMessageTypes.error, title: "Error " + res.status, message: ["Some error occured."] });
                             dispatch(alertShow(alerts));
                         }
                         dispatch({ type: UserActionTypes.FAILED_REGISTRATION_USER })

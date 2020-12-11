@@ -37,6 +37,8 @@
     <None Remove="ClientApp\src\components\ItemPage.tsx" />
     <None Remove="ClientApp\src\components\Login.tsx" />
     <None Remove="ClientApp\src\components\modals\AddItemModal.tsx" />
+    <None Remove="ClientApp\src\components\modals\AddPriceModal.tsx" />
+    <None Remove="ClientApp\src\components\modals\UpdateItemModal.tsx" />
     <None Remove="ClientApp\src\components\Register.tsx" />
     <None Remove="ClientApp\src\store\alert\actions.ts" />
     <None Remove="ClientApp\src\store\alert\reducer.ts" />
@@ -44,10 +46,16 @@
     <None Remove="ClientApp\src\store\items\actions.ts" />
     <None Remove="ClientApp\src\store\items\reducer.ts" />
     <None Remove="ClientApp\src\store\items\types.ts" />
+    <None Remove="ClientApp\src\store\prices\actions.ts" />
     <None Remove="ClientApp\src\store\user\actions.ts" />
     <None Remove="ClientApp\src\store\user\reducer.ts" />
     <None Remove="ClientApp\src\store\user\types.ts" />
     <None Remove="ClientApp\src\utils\apiFetch.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\store\categories\" />
+    <Folder Include="ClientApp\src\store\shops\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

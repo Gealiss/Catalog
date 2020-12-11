@@ -39,7 +39,7 @@ namespace Catalog.Controllers
         }
 
         [HttpGet("minPrice/{itemId:length(24)}")]
-        public ActionResult<PriceInfo> GetMinPrice(string itemId)
+        public ActionResult<PriceHistory> GetMinPrice(string itemId)
         {
             if(itemId == null)
             {
@@ -69,7 +69,7 @@ namespace Catalog.Controllers
         }
 
         [HttpGet("prices/{itemId:length(24)}")]
-        public ActionResult<List<PriceInfo>> GetPrices(string itemId)
+        public ActionResult<List<PriceHistory>> GetPrices(string itemId)
         {
             // Get the newest price for this item in each shop, that sells it
             var shops =_dbService.Shops.Get();
@@ -89,9 +89,13 @@ namespace Catalog.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult<PriceHistory> Create(PriceHistory price)
         {
-            _dbService.PriceHistory.Create(price);
+            if (ModelState.IsValid)
+            {
+                _dbService.PriceHistory.Create(price);
 
-            return CreatedAtRoute("GetPriceHistory", new { id = price.Id.ToString() }, price);
+                return CreatedAtRoute("GetPriceHistory", new { id = price.Id.ToString() }, price);
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPut("{id:length(24)}")]

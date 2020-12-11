@@ -70,7 +70,8 @@ namespace Catalog.Controllers
 
                 if (item == null)
                 {
-                    return NotFound();
+                    ModelState.AddModelError("Id", "Such item id does not exist.");
+                    return BadRequest(ModelState);
                 }
                 _dbService.Items.Update(id, itemIn);
 
@@ -87,7 +88,8 @@ namespace Catalog.Controllers
 
             if (item == null)
             {
-                return NotFound();
+                ModelState.AddModelError("Id", "Such item id does not exist.");
+                return BadRequest(ModelState);
             }
 
             _dbService.Items.Remove(item.Id);

@@ -4,7 +4,7 @@ import * as AlertTypes from '../alert/types';
 export function requestItems() {
     return (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.items && appState.items.items.length === 0) {
+        if (appState && appState.items) {
             fetch(`api/items`)
                 .then(response => response.json())
                 .then(data => {
@@ -20,7 +20,7 @@ export function parseItemErrors(data) {
     let error = null;
     let alerts = [];
     for (var e in ItemModelErrors) {
-        error = data[e] != undefined ? data[e] : null;
+        error = data[e] ? data[e] : null;
         if (error != null) {
             let title = ItemModelErrors[e];
             alerts.push({ type: AlertTypes.AlertMessageTypes.error, title: title, message: error });

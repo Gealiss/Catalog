@@ -39,7 +39,7 @@ export class AddItemModal extends React.Component {
     }
     render() {
         return (React.createElement("div", null,
-            React.createElement(Button, { color: "success", onClick: this.toggle }, "Add"),
+            React.createElement(Button, { color: "success", onClick: this.toggle, block: true }, "Add"),
             React.createElement(Modal, { isOpen: this.state.isOpened, toggle: this.toggle },
                 React.createElement(ModalHeader, { toggle: this.toggle }, "Add item"),
                 React.createElement(ModalBody, null,
@@ -77,7 +77,7 @@ export class AddItemModal extends React.Component {
                     alerts.push({
                         type: AlertTypes.AlertMessageTypes.error,
                         title: "Error " + res.status,
-                        message: "Some error occured."
+                        message: ["Some error occured."]
                     });
                 }
                 this.setState(state => (Object.assign(Object.assign({}, state), { alerts: alerts })));

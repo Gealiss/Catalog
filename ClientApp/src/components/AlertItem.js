@@ -45,6 +45,8 @@ export class AlertItem extends React.Component {
                     React.createElement("hr", null),
                     React.createElement("p", { className: "mb-0" }, "Test.")));
             }
+            default:
+                return null;
         }
     }
 }

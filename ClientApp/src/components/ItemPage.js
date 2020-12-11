@@ -16,13 +16,14 @@ class ItemPage extends React.Component {
         this.loadPrices();
     }
     render() {
-        if (this.props.isLoading) {
+        // If items and shops is still loading
+        if (this.props.isLoading && this.props.isShopsLoading) {
             return React.createElement(React.Fragment, null,
                 " Loading... ",
                 React.createElement(Spinner, { size: "xl", color: "primary" }),
                 " ");
         }
-        this.item = this.props.items.find(item => item.id == this.props.match.params.itemId);
+        this.item = this.props.items.find(item => item.id === this.props.match.params.itemId);
         if (!this.item) {
             return React.createElement(Redirect, { to: "/" });
         }
@@ -41,14 +42,17 @@ class ItemPage extends React.Component {
                     this.state.isPricesLoading ? React.createElement(Spinner, { size: "sm", color: "primary" }) : null,
                     this.state.itemPrices
                         ?
-                            this.state.itemPrices.map((price, i) => React.createElement(Row, { key: i },
-                                React.createElement(Col, null,
-                                    React.createElement("p", null, price.shop)),
-                                React.createElement(Col, null,
-                                    React.createElement("b", null, price.price)),
-                                React.createElement(Col, null, price.availability
-                                    ? React.createElement(Badge, { color: "success" }, "In stock")
-                                    : React.createElement(Badge, { color: "secondary" }, "Out of stock"))))
+                            this.state.itemPrices.map((price, i) => {
+                                let shop = this.props.shops.find(shop => shop.id === price.shop_id);
+                                return (React.createElement(Row, { key: i },
+                                    React.createElement(Col, null, (shop === null || shop === void 0 ? void 0 : shop.name) ? React.createElement("p", null, shop.name)
+                                        : React.createElement("p", null, "Unknown")),
+                                    React.createElement(Col, null,
+                                        React.createElement("b", null, price.price)),
+                                    React.createElement(Col, null, price.availability
+                                        ? React.createElement(Badge, { color: "success" }, "In stock")
+                                        : React.createElement(Badge, { color: "secondary" }, "Out of stock"))));
+                            })
                         : React.createElement("small", null, "no info"),
                     React.createElement("hr", null),
                     React.createElement("p", null, this.item.description)))));
@@ -68,5 +72,5 @@ class ItemPage extends React.Component {
         });
     }
 }
-export default connect((state) => state.items, ItemActionCreators)(ItemPage);
+export default connect((state) => (Object.assign(Object.assign({}, state.items), state.shops)), ItemActionCreators)(ItemPage);
 //# sourceMappingURL=ItemPage.js.map

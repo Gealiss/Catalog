@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Card, CardBody, CardSubtitle, CardTitle, Col, Row } from 'reactstrap';
 import { AddItemModal } from './modals/AddItemModal';
+import UpdateItemModal from './modals/UpdateItemModal';
+import AddPriceModal from './modals/AddPriceModal';
 import { UserRoles } from '../store/user/types';
 class AdminPanel extends React.Component {
     constructor(props) {
@@ -22,7 +24,9 @@ class AdminPanel extends React.Component {
                         React.createElement(CardBody, null,
                             React.createElement(CardTitle, { tag: "h5" }, "Items"),
                             React.createElement(CardSubtitle, { tag: "h6", className: "mb-2 text-muted" }, "Items manage."),
-                            React.createElement(AddItemModal, null)))),
+                            React.createElement(AddItemModal, null),
+                            React.createElement(UpdateItemModal, null),
+                            React.createElement(AddPriceModal, null)))),
                 React.createElement(Col, null,
                     React.createElement(Card, null,
                         React.createElement(CardBody, null,

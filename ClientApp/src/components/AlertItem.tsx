@@ -74,6 +74,8 @@ export class AlertItem extends React.Component<AlertItemProps, AlertItemState> {
                     </Alert>
                 );
             }
+            default:
+                return null;
         }
     }
 }

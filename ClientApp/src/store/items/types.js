@@ -4,6 +4,7 @@ export var ItemModelErrors;
 (function (ItemModelErrors) {
     ItemModelErrors["Category_name"] = "Incorrect category name";
     ItemModelErrors["Name"] = "Incorrect name";
+    ItemModelErrors["Id"] = "Wrong item id";
 })(ItemModelErrors || (ItemModelErrors = {}));
 //ENUM FOR TYPES
 export var ItemActionTypes;

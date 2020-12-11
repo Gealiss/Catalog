@@ -27,9 +27,7 @@ export class NavMenu extends React.PureComponent {
                     React.createElement(Collapse, { className: "d-sm-inline-flex flex-sm-row-reverse", isOpen: this.state.isOpen, navbar: true },
                         React.createElement("ul", { className: "navbar-nav flex-grow" },
                             React.createElement(NavItem, null,
-                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/" }, "Home")),
-                            React.createElement(NavItem, null,
-                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/catalog" }, "Catalog")),
+                                React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/" }, "Catalog")),
                             ((_a = this.props.user) === null || _a === void 0 ? void 0 : _a.role) == UserRoles.Admin
                                 ?
                                     React.createElement(NavItem, null,

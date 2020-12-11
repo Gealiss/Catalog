@@ -1,6 +1,5 @@
 ﻿import { AppThunkAction } from '../index';
 import { Item, ItemActionTypes, KnownAction, ItemModelErrors } from './types';
-import { alertShow } from '../alert/actions';
 import { Get, Post } from 'src/utils/apiFetch';
 import * as AlertTypes from '../alert/types';
 
@@ -8,7 +7,7 @@ import * as AlertTypes from '../alert/types';
 export function requestItems(): AppThunkAction<KnownAction> {
     return (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.items && appState.items.items.length === 0) {
+        if (appState && appState.items) {
             fetch(`api/items`)
                 .then(response => response.json() as Promise<Item[]>)
                 .then(data => {
@@ -26,7 +25,7 @@ export function parseItemErrors(data: any): AlertTypes.Alert[] {
     let alerts: AlertTypes.Alert[] = [];
 
     for (var e in ItemModelErrors) {
-        error = data[e] != undefined ? data[e] : null;
+        error = data[e] ? data[e] : null;
         if (error != null) {
             let title = (ItemModelErrors as any)[e];
             alerts.push({ type: AlertTypes.AlertMessageTypes.error, title: title, message: error });

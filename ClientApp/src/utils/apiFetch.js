@@ -55,4 +55,52 @@ export function Post(url = '', data = {}) {
         return res;
     });
 }
+export function Put(url = '', data = {}) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Default options are marked with *
+        const response = yield fetch(url, {
+            method: 'PUT',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        let parsedData = null;
+        try {
+            parsedData = yield response.json(); // parses JSON response into native JavaScript objects
+        }
+        catch (e) { }
+        let res = { isOk: response.ok, status: response.status, data: parsedData };
+        return res;
+    });
+}
+export function Delete(url = '') {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch(url, {
+            method: 'DELETE',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                //'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        });
+        let parsedData = null;
+        try {
+            parsedData = yield response.json(); // parses JSON response into native JavaScript objects
+        }
+        catch (e) { }
+        let res = { isOk: response.ok, status: response.status, url: response.url, data: parsedData };
+        return res;
+    });
+}
 //# sourceMappingURL=apiFetch.js.map

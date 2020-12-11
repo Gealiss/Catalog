@@ -1,8 +1,11 @@
 ﻿import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Col, Row } from 'reactstrap';
+import { Button, ButtonGroup, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Col, Row } from 'reactstrap';
+
 import { AddItemModal } from './modals/AddItemModal';
+import UpdateItemModal from './modals/UpdateItemModal';
+import AddPriceModal from './modals/AddPriceModal';
 
 import { ApplicationState } from '../store/index';
 import { UserState, UserRoles } from '../store/user/types';
@@ -27,8 +30,12 @@ class AdminPanel extends React.Component<AdminPanelProps> {
                             <Card>
                                 <CardBody>
                                     <CardTitle tag="h5">Items</CardTitle>
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted">Items manage.</CardSubtitle>
-                                    <AddItemModal />
+                                <CardSubtitle tag="h6" className="mb-2 text-muted">Items manage.</CardSubtitle>
+
+                                <AddItemModal />
+                                <UpdateItemModal />
+                                <AddPriceModal />
+
                                 </CardBody>
                             </Card>
                         </Col>

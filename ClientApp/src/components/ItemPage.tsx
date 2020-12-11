@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../store/index';
 import { Redirect } from 'react-router-dom';
 
-import { Item, ItemPrice, ItemsState } from '../store/items/types';
+import { Item, ItemsState } from '../store/items/types';
+import { Shop, ShopsState } from '../store/shops/types';
+import { Price } from '../store/prices/types';
 import * as ItemActionCreators from '../store/items/actions';
 import { Get, Post } from 'src/utils/apiFetch';
 
@@ -12,10 +14,11 @@ import { Badge, Col, Row, Spinner } from 'reactstrap';
 
 interface ItemPageState {
     isPricesLoading: boolean;
-    itemPrices: ItemPrice[] | null;
+    itemPrices: Price[] | null;
 }
 
-type ItemPageProps = ItemsState & typeof ItemActionCreators & RouteComponentProps<{ itemId: string }>;
+type ItemPageProps = ItemsState & ShopsState
+    & typeof ItemActionCreators & RouteComponentProps<{ itemId: string }>;
 
 class ItemPage extends React.Component<ItemPageProps, ItemPageState> {
     item: Item | undefined;
@@ -34,11 +37,12 @@ class ItemPage extends React.Component<ItemPageProps, ItemPageState> {
     }
 
     public render() {
-        if (this.props.isLoading) {
+        // If items and shops is still loading
+        if (this.props.isLoading && this.props.isShopsLoading) {
             return <> Loading... <Spinner size="xl" color="primary" /> </>
         }
 
-        this.item = this.props.items.find(item => item.id == this.props.match.params.itemId);
+        this.item = this.props.items.find(item => item.id === this.props.match.params.itemId);
         if (!this.item) {
             return <Redirect to="/" />;
         }
@@ -61,25 +65,32 @@ class ItemPage extends React.Component<ItemPageProps, ItemPageState> {
                         {
                             this.state.itemPrices
                                 ?
-                                this.state.itemPrices.map((price, i) =>
-                                    <Row key={i}>
-                                        <Col>
-                                            <p>{price.shop}</p>
-                                        </Col>
+                                this.state.itemPrices.map((price, i) => {
+                                    let shop: Shop | undefined = this.props.shops.find(shop => shop.id === price.shop_id);
+                                    return (
+                                        <Row key={i}>
+                                            <Col>
+                                                {
+                                                    shop?.name 
+                                                        ? <p>{shop.name}</p>
+                                                        : <p>Unknown</p>
+                                                }
+                                            </Col>
 
-                                        <Col>
-                                            <b>{price.price}</b>
-                                        </Col>
+                                            <Col>
+                                                <b>{price.price}</b>
+                                            </Col>
 
-                                        <Col>
-                                            {
-                                                price.availability
-                                                    ? <Badge color="success">In stock</Badge>
-                                                    : <Badge color="secondary">Out of stock</Badge>
-                                            }
-                                        </Col>
-                                    </Row>
+                                            <Col>
+                                                {
+                                                    price.availability
+                                                        ? <Badge color="success">In stock</Badge>
+                                                        : <Badge color="secondary">Out of stock</Badge>
+                                                }
+                                            </Col>
+                                        </Row>
                                     )
+                                })
                                 : <small>no info</small>
                         }
                         
@@ -97,7 +108,7 @@ class ItemPage extends React.Component<ItemPageProps, ItemPageState> {
             .then(res => {
                 this.setState((state) => ({ ...state, isPricesLoading: false }));
 
-                let itemPrices: ItemPrice[] = res.data as ItemPrice[];
+                let itemPrices: Price[] = res.data as Price[];
                 if (res.isOk) {
                     this.setState((state) => ({ ...state, itemPrices: itemPrices }));
                 } else {
@@ -108,6 +119,6 @@ class ItemPage extends React.Component<ItemPageProps, ItemPageState> {
 }
 
 export default connect(
-    (state: ApplicationState) => state.items,
+    (state: ApplicationState) => ({ ...state.items, ...state.shops }),
     ItemActionCreators
 )(ItemPage);

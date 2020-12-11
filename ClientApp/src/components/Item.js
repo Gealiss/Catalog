@@ -21,7 +21,8 @@ export class ItemComponent extends React.Component {
                 React.createElement("div", { className: "card h-100", id: this.props.item.id },
                     React.createElement("img", { src: img, className: "card-img-top", alt: "..." }),
                     React.createElement("div", { className: "card-body" },
-                        React.createElement("h5", { className: "card-title" }, this.props.item.name),
+                        React.createElement(Link, { to: `item/${this.props.item.id}` },
+                            React.createElement("h5", { className: "card-title" }, this.props.item.name)),
                         ((_a = this.state.itemPrice) === null || _a === void 0 ? void 0 : _a.availability) ? React.createElement(Badge, { color: "success" }, "In stock")
                             : React.createElement(Badge, { color: "secondary" }, "Out of stock"),
                         React.createElement("p", { className: "card-text" }, this.props.item.description)),
@@ -33,7 +34,7 @@ export class ItemComponent extends React.Component {
                                 this.state.isPriceLoading
                                     ? React.createElement(Spinner, { size: "sm", color: "primary" }) : null,
                                 ((_b = this.state.itemPrice) === null || _b === void 0 ? void 0 : _b.price) ?
-                                    React.createElement(Link, { className: "stretched-link", to: `item/${this.props.item.id}` }, this.state.itemPrice.price)
+                                    React.createElement("b", null, this.state.itemPrice.price)
                                     :
                                         React.createElement("small", null, "no info"))))))));
     }

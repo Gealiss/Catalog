@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
-import { Item, ItemPrice } from '../store/items/types';
+import { Item } from '../store/items/types';
+import { Price } from '../store/prices/types';
 import { Get, Post } from 'src/utils/apiFetch';
 import { Badge, Col, Row, Spinner } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -10,7 +11,7 @@ interface ItemComponentProps {
 
 interface ItemComponentState {
     isPriceLoading: boolean;
-    itemPrice: ItemPrice | null;
+    itemPrice: Price | null;
 }
 
 export class ItemComponent extends React.Component<ItemComponentProps, ItemComponentState> {
@@ -33,7 +34,9 @@ export class ItemComponent extends React.Component<ItemComponentProps, ItemCompo
                     <div className="card h-100" id={this.props.item.id}>
                         <img src={img} className="card-img-top" alt="..."></img>
                         <div className="card-body">
-                            <h5 className="card-title">{this.props.item.name}</h5>
+                            <Link to={`item/${this.props.item.id}`}>
+                                <h5 className="card-title">{this.props.item.name}</h5>
+                            </Link>
                             {
                                 this.state.itemPrice?.availability
                                     ? <Badge color="success">In stock</Badge>
@@ -55,9 +58,7 @@ export class ItemComponent extends React.Component<ItemComponentProps, ItemCompo
                                     {
                                         this.state.itemPrice?.price
                                             ?
-                                            <Link className="stretched-link" to={`item/${this.props.item.id}`}>
-                                                {this.state.itemPrice.price}
-                                            </Link>
+                                            <b>{this.state.itemPrice.price}</b>
                                             :
                                             <small>no info</small>
                                     }
@@ -77,7 +78,7 @@ export class ItemComponent extends React.Component<ItemComponentProps, ItemCompo
             .then(res => {
                 this.setState((state) => ({ ...state, isPriceLoading: false }));
 
-                let itemPrice: ItemPrice = res.data as ItemPrice;
+                let itemPrice: Price = res.data as Price;
                 if (res.isOk) {
                     this.setState((state) => ({ ...state, itemPrice: itemPrice }));
                 } else {

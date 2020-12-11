@@ -59,7 +59,7 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
     render() {
         return (
             <div>
-                <Button color="success" onClick={this.toggle}>Add</Button>
+                <Button color="success" onClick={this.toggle} block>Add</Button>
                 <Modal isOpen={this.state.isOpened} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>Add item</ModalHeader>
                     <ModalBody>
@@ -114,7 +114,7 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
                         alerts.push({
                             type: AlertTypes.AlertMessageTypes.error,
                             title: "Error " + res.status,
-                            message: "Some error occured."
+                            message: ["Some error occured."]
                         });
                     }
                     this.setState(state => ({ ...state, alerts: alerts }));

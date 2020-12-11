@@ -9,7 +9,7 @@ export interface AlertState {
 export interface Alert {
     type: AlertMessageTypes;
     title: string;
-    message: string | string[] | null;
+    message: string[] | null;
 }
 
 export enum AlertMessageTypes {

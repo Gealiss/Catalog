@@ -12,11 +12,13 @@ import NavMenu from './components/NavMenu';
 import { AlertBox } from './components/AlertBox';
 import AdminPanel from './components/AdminPanel';
 import ItemPage from './components/ItemPage';
+import { ApplicationState } from './store/index';
 
 import * as UserActionCreators from './store/user/actions';
 import * as ItemActionCreators from './store/items/actions';
+import * as CategoryActionCreators from './store/categories/actions';
+import * as ShopActionCreators from './store/shops/actions';
 import { UserState } from './store/user/types';
-import { ApplicationState } from './store/index';
 import { AlertState } from './store/alert/types';
 
 interface AppProps {
@@ -24,11 +26,15 @@ interface AppProps {
     alertState: AlertState;
     userActions: typeof UserActionCreators;
     itemActions: typeof ItemActionCreators;
+    categoryActions: typeof CategoryActionCreators;
+    shopActions: typeof ShopActionCreators;
 }
 
 class App extends React.PureComponent<AppProps & React.ReactNode> {
     public componentWillMount() {
         this.props.itemActions.requestItems();
+        this.props.categoryActions.requestCategories();
+        this.props.shopActions.requestShops();
     }
     public componentDidMount() {
         this.props.userActions.checkToken();
@@ -63,7 +69,9 @@ const mapStateToProps = function (state: ApplicationState) {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         userActions: bindActionCreators(UserActionCreators, dispatch),
-        itemActions: bindActionCreators(ItemActionCreators, dispatch)
+        itemActions: bindActionCreators(ItemActionCreators, dispatch),
+        categoryActions: bindActionCreators(CategoryActionCreators, dispatch),
+        shopActions: bindActionCreators(ShopActionCreators, dispatch)
     }
 }
 
