@@ -7,6 +7,8 @@ import { AddItemModal } from './modals/AddItemModal';
 import { AddCategoryModal } from './modals/AddCategoryModal';
 import { AddShopModal } from './modals/AddShopModal';
 import UpdateItemModal from './modals/UpdateItemModal';
+import UpdateShopModal from './modals/UpdateShopModal';
+import UpdateCategoryModal from './modals/UpdateCategoryModal';
 import AddPriceModal from './modals/AddPriceModal';
 
 import { ApplicationState } from '../store/index';
@@ -48,6 +50,7 @@ class AdminPanel extends React.Component<AdminPanelProps> {
                                 <CardSubtitle tag="h6" className="mb-2 text-muted">Shops manage.</CardSubtitle>
 
                                 <AddShopModal />
+                                <UpdateShopModal />
 
                             </CardBody>
                         </Card>
@@ -60,6 +63,7 @@ class AdminPanel extends React.Component<AdminPanelProps> {
                                 <CardSubtitle tag="h6" className="mb-2 text-muted">Category manage.</CardSubtitle>
 
                                 <AddCategoryModal />
+                                <UpdateCategoryModal />
 
                             </CardBody>
                         </Card>

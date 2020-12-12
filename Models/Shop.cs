@@ -14,7 +14,7 @@ namespace Catalog.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         [BsonRequired]
-        [MinLength(3), MaxLength(50)]
+        [RegularExpression(@"^[\w\s]{3,50}$")]
         public string Name { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }

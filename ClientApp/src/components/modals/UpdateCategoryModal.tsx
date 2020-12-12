@@ -4,22 +4,21 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Spinn
 import { AlertItem } from '../AlertItem';
 
 import { ApplicationState } from 'src/store/index';
-import { Item, ItemsState, ItemModelErrors } from 'src/store/items/types';
-import { CategoriesState } from 'src/store/categories/types';
-import { parseItemErrors } from 'src/store/items/actions';
+import { Category, CategoriesState } from 'src/store/categories/types';
+import { parseCategoryErrors } from 'src/store/categories/actions';
 import * as AlertTypes from 'src/store/alert/types';
 import { Put, Delete } from 'src/utils/apiFetch';
 
-interface UpdateItemModalState {
+interface UpdateCategoryModalState {
     isActionPending: boolean;
     isOpened: boolean;
     alerts: AlertTypes.Alert[] | null;
-    item: Item;
+    category: Category;
 }
 
-type UpdateItemModalProps = ItemsState & CategoriesState;
+type UpdateCategoryModalProps = CategoriesState;
 
-class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemModalState> {
+class UpdateCategoryModal extends React.Component<UpdateCategoryModalProps, UpdateCategoryModalState> {
     constructor(props: any) {
         super(props);
 
@@ -27,16 +26,16 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
             alerts: null,
             isActionPending: false,
             isOpened: false,
-            item: {
-                id: '', name: '', category_name: '', description: '', img: ''
+            category: {
+                name: '', description: ''
             }            
         }
         this.toggle = this.toggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.updateItem = this.updateItem.bind(this);
-        this.loadItem = this.loadItem.bind(this);
-        this.deleteItem = this.deleteItem.bind(this);
+        this.updateCategory = this.updateCategory.bind(this);
+        this.deleteCategory = this.deleteCategory.bind(this);
     }
 
     toggle() {
@@ -46,41 +45,39 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
     handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         //Change value of edited field only, other state fields are same
-        this.setState((state) => ({ ...state, item: { ...state.item, [name]: value } }));
+        this.setState((state) => ({ ...state, category: { ...state.category, [name]: value } }));
+    }
+
+    handleSelect(e: React.ChangeEvent<HTMLInputElement>) {
+        // For select tag get shop from props by selected id
+        const { value } = e.target;
+        let category = this.props.categories.find(category => category.name === value);
+
+        this.setState((state) => ({
+            ...state, category:
+                { name: value, description: category?.description || '' }
+        }));
     }
 
     handleSubmit() {
-        // Check if item id is 24 chars length
-        if (this.state.item.id.length != 24) {
-            alert("Item id must be exactly 24 chars long.")
+        if (this.state.category.name.length < 3 || this.state.category.name.length > 30) {
+            alert("Category must have a name. 3-30 chars.")
             return;
         }
-        let item: Item = this.state.item;
-        this.updateItem(item);
-    }
-
-    loadItem() {
-        // If items is still loading, or loaded, but empty
-        if (this.props.isLoading || this.props.items.length == 0) {
-            alert("No items, or still loading.")
-            return;
-        }
-        // Search item in global state by id from state
-        let item: Item | undefined = this.props.items.find(item => item.id == this.state.item.id);
-        if (!item) {
-            alert("No item was found.")
-            return;
-        }
-        // Set found item to state
-        this.setState(state => ({ ...state, item: item ? item : state.item }));
+        let category: Category = this.state.category;
+        this.updateCategory(category);
     }
 
     render() {
+        if (this.props.isCategoriesLoading) {
+            alert("Categories is still loading");
+            return;
+        }
         return (
             <div>
                 <Button color="warning" onClick={this.toggle} block>Update</Button>
                 <Modal isOpen={this.state.isOpened} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Update item</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Update category</ModalHeader>
                     <ModalBody>
                         {
                             this.state.alerts
@@ -90,22 +87,9 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
                                 null
                         }
 
-                        <InputGroup>
-                            <Input type="text" name="id" id="itemIdInput" required
-                                placeholder="24 char string"
-                                value={this.state.item.id} onChange={e => this.handleChange(e)} />
-                            <InputGroupAddon addonType="prepend">
-                                <Button onClick={this.loadItem}>Find by id</Button>
-                            </InputGroupAddon>
-                        </InputGroup>
-
-                        <Label for="itemNameInput">Item name:</Label>
-                        <Input type="text" name="name" id="itemNameInput" required
-                            value={this.state.item.name} onChange={e => this.handleChange(e)} />
-
-                        <Label for="itemCategoryInput">Item category:</Label>
-                        <Input type="select" name="category_name" id="itemCategoryInput"
-                            value={this.state.item.category_name} onChange={e => this.handleChange(e)}>
+                        <Label for="categoryNameInput">Category:</Label>
+                        <Input type="select" name="id" id="categoryNameInput"
+                            value={this.state.category.name} onChange={e => this.handleSelect(e)}>
                             <option value=''>Select category...</option>)
                             {
                                 this.props.categories.map((category, i) =>
@@ -113,19 +97,16 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
                             }
                         </Input>
 
-                        <Label for="itemDescriptionInput">Item description:</Label>
-                        <Input type="text" name="description" id="itemDescriptionInput"
-                            value={this.state.item.description} onChange={e => this.handleChange(e)} />
+                        <Label for="shopDescriptionInput">Category description:</Label>
+                        <Input type="text" name="description" id="shopDescriptionInput"
+                            value={this.state.category.description} onChange={e => this.handleChange(e)} />
 
-                        <Label for="itemImgInput">Item image URL:</Label>
-                        <Input type="text" name="img" id="itemImgInput"
-                            value={this.state.item.img} onChange={e => this.handleChange(e)} />
                     </ModalBody>
                     <ModalFooter>
                         {
                             this.state.isActionPending ? <Spinner size="sm" color="primary" /> : null
                         }
-                        <Button color="danger" onClick={this.deleteItem}>Delete</Button>
+                        <Button color="danger" onClick={this.deleteCategory}>Delete</Button>
                         <Button color="primary" onClick={this.handleSubmit}>Update</Button>
                         <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                     </ModalFooter>
@@ -134,24 +115,19 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
         );
     }
 
-    deleteItem() {
-        // Check if item id is 24 chars length
-        if (this.state.item.id.length != 24) {
-            alert("Item id must be exactly 24 chars long.")
-            return;
-        }
+    deleteCategory() {
         this.setState(state => ({ ...state, isActionPending: true }));
 
-        Delete(`api/items/${this.state.item.id}`)
+        Delete(`api/categories/${this.state.category.name}`)
             .then(res => {
                 this.setState(state => ({ ...state, isActionPending: false }));
 
                 if (res.isOk) {
-                    alert(`Item was deleted ${this.state.item.name}, id: ${this.state.item.id}`);
+                    alert(`Category was deleted ${this.state.category.name}`);
                     this.setState(state => ({ ...state, isOpened: false, alerts: null }));
                 } else if (res.status == 400) {
                     // If badrequest response
-                    let alerts = parseItemErrors(res.data);
+                    let alerts = parseCategoryErrors(res.data);
                     if (alerts.length == 0) {
                         alerts.push({
                             type: AlertTypes.AlertMessageTypes.error,
@@ -174,19 +150,19 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
             });
     }
 
-    updateItem(item: Item) {
+    updateCategory(category: Category) {
         this.setState(state => ({ ...state, isActionPending: true }));
 
-        Put(`api/items/${this.state.item.id}`, item)
+        Put(`api/categories/${this.state.category.name}`, category)
             .then(res => {
                 this.setState(state => ({ ...state, isActionPending: false }));
 
                 if (res.isOk) {
-                    alert(`Item was updated ${item.name}, id: ${item.id}`);
+                    alert(`Category was updated ${category.name}`);
                     this.setState(state => ({ ...state, isOpened: false, alerts: null }));
                 } else if (res.status == 400) {
                     // If badrequest response
-                    let alerts = parseItemErrors(res.data);
+                    let alerts = parseCategoryErrors(res.data);
                     if (alerts.length == 0) {
                         alerts.push({
                             type: AlertTypes.AlertMessageTypes.error,
@@ -211,5 +187,5 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
 }
 
 export default connect(
-    (state: ApplicationState) => ({ ...state.items, ...state.categories })
-)(UpdateItemModal);
+    (state: ApplicationState) => ({ ...state.categories })
+)(UpdateCategoryModal);

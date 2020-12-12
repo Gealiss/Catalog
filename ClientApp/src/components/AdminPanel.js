@@ -6,6 +6,8 @@ import { AddItemModal } from './modals/AddItemModal';
 import { AddCategoryModal } from './modals/AddCategoryModal';
 import { AddShopModal } from './modals/AddShopModal';
 import UpdateItemModal from './modals/UpdateItemModal';
+import UpdateShopModal from './modals/UpdateShopModal';
+import UpdateCategoryModal from './modals/UpdateCategoryModal';
 import AddPriceModal from './modals/AddPriceModal';
 import { UserRoles } from '../store/user/types';
 class AdminPanel extends React.Component {
@@ -34,13 +36,15 @@ class AdminPanel extends React.Component {
                         React.createElement(CardBody, null,
                             React.createElement(CardTitle, { tag: "h5" }, "Shops"),
                             React.createElement(CardSubtitle, { tag: "h6", className: "mb-2 text-muted" }, "Shops manage."),
-                            React.createElement(AddShopModal, null)))),
+                            React.createElement(AddShopModal, null),
+                            React.createElement(UpdateShopModal, null)))),
                 React.createElement(Col, null,
                     React.createElement(Card, null,
                         React.createElement(CardBody, null,
                             React.createElement(CardTitle, { tag: "h5" }, "Category"),
                             React.createElement(CardSubtitle, { tag: "h6", className: "mb-2 text-muted" }, "Category manage."),
-                            React.createElement(AddCategoryModal, null)))))));
+                            React.createElement(AddCategoryModal, null),
+                            React.createElement(UpdateCategoryModal, null)))))));
     }
 }
 export default connect((state) => state.user)(AdminPanel);

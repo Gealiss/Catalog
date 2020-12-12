@@ -40,25 +40,33 @@ namespace Catalog.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult<Shop> Create(Shop shop)
         {
-            _dbService.Shops.Create(shop);
-
-            return CreatedAtRoute("GetShop", new { id = shop.Id.ToString() }, shop);
+            if (ModelState.IsValid)
+            {
+                _dbService.Shops.Create(shop);
+                return CreatedAtRoute("GetShop", new { id = shop.Id.ToString() }, shop);
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPut("{id:length(24)}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Update(string id, Shop shopIn)
         {
-            var shop = _dbService.Shops.Get(id);
-
-            if (shop == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                var shop = _dbService.Shops.Get(id);
+
+                if (shop == null)
+                {
+                    ModelState.AddModelError("Id", "Such shop id does not exist.");
+                    return BadRequest(ModelState);
+                }
+
+                _dbService.Shops.Update(id, shopIn);
+
+                return NoContent();
             }
-
-            _dbService.Shops.Update(id, shopIn);
-
-            return NoContent();
+            return BadRequest(ModelState);
         }
 
         [HttpDelete("{id:length(24)}")]
@@ -69,7 +77,8 @@ namespace Catalog.Controllers
 
             if (shop == null)
             {
-                return NotFound();
+                ModelState.AddModelError("Id", "Such shop id does not exist.");
+                return BadRequest(ModelState);
             }
 
             _dbService.Shops.Remove(shop.Id);
