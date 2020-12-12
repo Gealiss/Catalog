@@ -2,16 +2,58 @@
 import { Item, ItemActionTypes, KnownAction, ItemModelErrors } from './types';
 import { Get, Post } from 'src/utils/apiFetch';
 import * as AlertTypes from '../alert/types';
+import { FilterState } from '../Filter';
 
 // Load all items
 export function requestItems(): AppThunkAction<KnownAction> {
     return (dispatch, getState) => {
         const appState = getState();
         if (appState && appState.items) {
-            fetch(`api/items`)
-                .then(response => response.json() as Promise<Item[]>)
-                .then(data => {
-                    dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+
+            // If filter set up
+            let filter: FilterState = appState.filter ? appState.filter : {};
+
+            if (Object.keys(filter).length !== 0) {
+                Post(`api/items/filter`, filter)
+                    .then(res => {
+                        if (res.isOk) {
+                            let data: Item[] = res.data as Item[];
+                            dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+                        } else {
+                            dispatch({ type: ItemActionTypes.FAILED_RECEIVE_ITEMS });
+                        }
+                    });
+                dispatch({ type: ItemActionTypes.REQUEST_ITEMS });
+                return;
+            }
+
+            Get(`api/items`)
+                .then(res => {
+                    if (res.isOk) {
+                        let data: Item[] = res.data as Item[];
+                        dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+                    } else {
+                        dispatch({ type: ItemActionTypes.FAILED_RECEIVE_ITEMS });
+                    }
+                });
+            dispatch({ type: ItemActionTypes.REQUEST_ITEMS });
+        }
+    }
+}
+
+// Load one item
+export function requestItem(itemId: string): AppThunkAction<KnownAction> {
+    return (dispatch, getState) => {
+        const appState = getState();
+        if (appState && appState.items) {
+            Get(`api/items/${itemId}`)
+                .then(res => {
+                    if (res.isOk) {
+                        let data: Item[] = [(res.data as Item)];
+                        dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+                    } else {
+                        dispatch({ type: ItemActionTypes.FAILED_RECEIVE_ITEMS });
+                    }
                 });
             dispatch({ type: ItemActionTypes.REQUEST_ITEMS });
         }

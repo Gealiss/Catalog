@@ -15,14 +15,21 @@ interface ItemComponentState {
 }
 
 export class ItemComponent extends React.Component<ItemComponentProps, ItemComponentState> {
+    _isMounted: boolean;
+
     constructor(props: ItemComponentProps) {
         super(props);
         this.state = { isPriceLoading: false, itemPrice: null };
+        this._isMounted = false;
 
         this.loadPrice = this.loadPrice.bind(this);
     }
     componentDidMount() {
-        this.loadPrice();
+        this._isMounted = true;
+        this._isMounted && this.loadPrice();
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     render() {
         let img: string = this.props.item.img == null || this.props.item.img === ''
@@ -73,16 +80,16 @@ export class ItemComponent extends React.Component<ItemComponentProps, ItemCompo
     }
 
     loadPrice() {
-        this.setState((state) => ({ ...state, isPriceLoading: true }));
+        this._isMounted && this.setState((state) => ({ ...state, isPriceLoading: true }));
         Get(`/api/priceHistory/minPrice/${this.props.item.id}`)
             .then(res => {
-                this.setState((state) => ({ ...state, isPriceLoading: false }));
+                this._isMounted && this.setState((state) => ({ ...state, isPriceLoading: false }));
 
                 let itemPrice: Price = res.data as Price;
                 if (res.isOk) {
-                    this.setState((state) => ({ ...state, itemPrice: itemPrice }));
+                    this._isMounted && this.setState((state) => ({ ...state, itemPrice: itemPrice }));
                 } else {
-                    this.setState((state) => ({ ...state, itemPrice: null }));
+                    this._isMounted && this.setState((state) => ({ ...state, itemPrice: null }));
                 }
             });
     }

@@ -1,5 +1,5 @@
-import * as WeatherForecasts from './WeatherForecasts';
 import * as Counter from './Counter';
+import * as Filter from './Filter';
 import { ItemsReducer } from './items/reducer';
 import { UserReducer } from './user/reducer';
 import { AlertReducer } from './alert/reducer';
@@ -10,7 +10,7 @@ import { ShopsReducer } from './shops/reducer';
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
     counter: Counter.reducer,
-    weatherForecasts: WeatherForecasts.reducer,
+    filter: Filter.reducer,
     items: ItemsReducer,
     user: UserReducer,
     alert: AlertReducer,

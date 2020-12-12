@@ -22,30 +22,39 @@ type ItemPageProps = ItemsState & ShopsState
 
 class ItemPage extends React.Component<ItemPageProps, ItemPageState> {
     item: Item | undefined;
+    _isMounted: boolean;
 
     constructor(props: any) {
         super(props);
         this.state = { isPricesLoading: false, itemPrices: null };
-
+        this._isMounted = false;
         // Try to get item by provided id
         this.item = undefined;
         this.loadPrices = this.loadPrices.bind(this);
     }
 
     componentDidMount() {
-        this.loadPrices();
+        this._isMounted = true;
+        if (this._isMounted) {
+            this.props.requestItem(this.props.match.params.itemId);
+            this.loadPrices();
+        }
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     public render() {
-        // If items and shops is still loading
-        if (this.props.isLoading && this.props.isShopsLoading) {
+        // Do render after componentDidMount
+        // If items or shops is still loading
+        if (!this._isMounted || (this.props.isLoading || this.props.isShopsLoading)) {
             return <> Loading... <Spinner size="xl" color="primary" /> </>
         }
-
-        this.item = this.props.items.find(item => item.id === this.props.match.params.itemId);
-        if (!this.item) {
+        if (this.props.items.length === 0) {
             return <Redirect to="/" />;
         }
+
+        this.item = this.props.items[0];
 
         let img: string = !this.item.img || this.item.img === ''
             ? "/roflan.png" : this.item.img;

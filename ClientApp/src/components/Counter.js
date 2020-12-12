@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as CounterStore from '../store/Counter';
-class Counter extends React.PureComponent {
+class Counter extends React.Component {
     render() {
         return (React.createElement(React.Fragment, null,
-            React.createElement("h1", null, "Counter"),
-            React.createElement("p", null, "This is a simple example of a React component."),
             React.createElement("p", { "aria-live": "polite" },
-                "Current count: ",
+                "Items total: ",
                 React.createElement("strong", null, this.props.count)),
-            React.createElement("button", { type: "button", className: "btn btn-primary btn-lg", onClick: () => { this.props.increment(); } }, "Increment")));
+            React.createElement("div", { className: "d-flex justify-content-center" },
+                React.createElement("button", { type: "button", className: "btn btn-primary", onClick: () => { this.props.incrementCounter(); } }, "Load more"))));
     }
 }
 ;

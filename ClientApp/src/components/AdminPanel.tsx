@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, ButtonGroup, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Col, Row } from 'reactstrap';
+import { Button, ButtonGroup, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Col, Row, Spinner } from 'reactstrap';
 
 import { AddItemModal } from './modals/AddItemModal';
 import { AddCategoryModal } from './modals/AddCategoryModal';
@@ -11,20 +11,34 @@ import UpdateShopModal from './modals/UpdateShopModal';
 import UpdateCategoryModal from './modals/UpdateCategoryModal';
 import AddPriceModal from './modals/AddPriceModal';
 
+import * as ItemActionCreators from '../store/items/actions';
 import { ApplicationState } from '../store/index';
 import { UserState, UserRoles } from '../store/user/types';
+import { ItemsState } from '../store/items/types';
+import { ShopsState } from '../store/shops/types';
+import { CategoriesState } from '../store/categories/types';
 
-type AdminPanelProps = UserState; // ... state we've requested from the Redux store
+type AdminPanelProps = UserState & ItemsState & ShopsState & CategoriesState
+    & typeof ItemActionCreators; // ... state we've requested from the Redux store
 
 class AdminPanel extends React.Component<AdminPanelProps> {
     constructor(props: AdminPanelProps) {
         super(props);
     }
 
+    componentDidMount() {
+        // Load all items to state and props
+        this.props.requestItems();
+    }
+
     render() {
         // Check if user state exist and user role is admin
         if (this.props.user?.role !== UserRoles.Admin) {
             return <Redirect to="/" />;
+        }
+        // If items, shops or categories is still loading
+        if (this.props.isLoading || this.props.isShopsLoading || this.props.isCategoriesLoading) {
+            return <> Loading data... <Spinner size="xl" color="primary" /> </>
         }
         return (
                 <>
@@ -76,5 +90,6 @@ class AdminPanel extends React.Component<AdminPanelProps> {
 }
 
 export default connect(
-    (state: ApplicationState) => state.user
-)(AdminPanel);
+    (state: ApplicationState) => ({ ...state.user, ...state.items, ...state.shops, ...state.categories }),
+    ItemActionCreators
+)(AdminPanel as any);

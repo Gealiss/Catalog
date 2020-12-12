@@ -35,6 +35,7 @@
     <None Remove="ClientApp\src\components\AlertBox.tsx" />
     <None Remove="ClientApp\src\components\AlertItem.tsx" />
     <None Remove="ClientApp\src\components\Catalog.tsx" />
+    <None Remove="ClientApp\src\components\Filter.tsx" />
     <None Remove="ClientApp\src\components\Item.tsx" />
     <None Remove="ClientApp\src\components\ItemPage.tsx" />
     <None Remove="ClientApp\src\components\Login.tsx" />
@@ -45,6 +46,7 @@
     <None Remove="ClientApp\src\store\alert\actions.ts" />
     <None Remove="ClientApp\src\store\alert\reducer.ts" />
     <None Remove="ClientApp\src\store\alert\types.ts" />
+    <None Remove="ClientApp\src\store\Filter.ts" />
     <None Remove="ClientApp\src\store\items\actions.ts" />
     <None Remove="ClientApp\src\store\items\reducer.ts" />
     <None Remove="ClientApp\src\store\items\types.ts" />

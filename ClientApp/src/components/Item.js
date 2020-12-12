@@ -6,10 +6,15 @@ export class ItemComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = { isPriceLoading: false, itemPrice: null };
+        this._isMounted = false;
         this.loadPrice = this.loadPrice.bind(this);
     }
     componentDidMount() {
-        this.loadPrice();
+        this._isMounted = true;
+        this._isMounted && this.loadPrice();
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     render() {
         var _a, _b;
@@ -39,16 +44,16 @@ export class ItemComponent extends React.Component {
                                         React.createElement("small", null, "no info"))))))));
     }
     loadPrice() {
-        this.setState((state) => (Object.assign(Object.assign({}, state), { isPriceLoading: true })));
+        this._isMounted && this.setState((state) => (Object.assign(Object.assign({}, state), { isPriceLoading: true })));
         Get(`/api/priceHistory/minPrice/${this.props.item.id}`)
             .then(res => {
-            this.setState((state) => (Object.assign(Object.assign({}, state), { isPriceLoading: false })));
+            this._isMounted && this.setState((state) => (Object.assign(Object.assign({}, state), { isPriceLoading: false })));
             let itemPrice = res.data;
             if (res.isOk) {
-                this.setState((state) => (Object.assign(Object.assign({}, state), { itemPrice: itemPrice })));
+                this._isMounted && this.setState((state) => (Object.assign(Object.assign({}, state), { itemPrice: itemPrice })));
             }
             else {
-                this.setState((state) => (Object.assign(Object.assign({}, state), { itemPrice: null })));
+                this._isMounted && this.setState((state) => (Object.assign(Object.assign({}, state), { itemPrice: null })));
             }
         });
     }

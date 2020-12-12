@@ -55,7 +55,7 @@ namespace Catalog.Services.Schemes
             {
                 return resultPrices;
             }
-            prices = prices.OrderByDescending(prices => prices.DateTime).ToList();
+            prices = prices.OrderBy(prices => prices.DateTime).ToList();
             
             shops.ForEach(shop => {
                 // Pick first item price in this shop
@@ -66,6 +66,29 @@ namespace Catalog.Services.Schemes
                 }
             });
             return resultPrices;
+        }
+
+        public bool ItemInShops(Item item, List<Shop> shops)
+        {
+            bool isInShops = false;
+
+            // Find all prices for this item, sort by date (desc)
+            var prices = priceHistory.Find(price => price.Item_id == item.Id).ToList();
+            if (prices.Count == 0)
+            {
+                return isInShops;
+            }
+            prices = prices.OrderByDescending(prices => prices.DateTime).ToList();
+
+            shops.ForEach(shop => {
+                // Pick first item price in this shop
+                var price = prices.Find(price => price.Shop_id == shop.Id);
+                if (price != null)
+                {
+                    isInShops = true;
+                }
+            });
+            return isInShops;
         }
     }
 }

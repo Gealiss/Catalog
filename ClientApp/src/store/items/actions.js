@@ -1,14 +1,55 @@
 import { ItemActionTypes, ItemModelErrors } from './types';
+import { Get, Post } from 'src/utils/apiFetch';
 import * as AlertTypes from '../alert/types';
 // Load all items
 export function requestItems() {
     return (dispatch, getState) => {
         const appState = getState();
         if (appState && appState.items) {
-            fetch(`api/items`)
-                .then(response => response.json())
-                .then(data => {
-                dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+            // If filter set up
+            let filter = appState.filter ? appState.filter : {};
+            if (Object.keys(filter).length !== 0) {
+                Post(`api/items/filter`, filter)
+                    .then(res => {
+                    if (res.isOk) {
+                        let data = res.data;
+                        dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+                    }
+                    else {
+                        dispatch({ type: ItemActionTypes.FAILED_RECEIVE_ITEMS });
+                    }
+                });
+                dispatch({ type: ItemActionTypes.REQUEST_ITEMS });
+                return;
+            }
+            Get(`api/items`)
+                .then(res => {
+                if (res.isOk) {
+                    let data = res.data;
+                    dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+                }
+                else {
+                    dispatch({ type: ItemActionTypes.FAILED_RECEIVE_ITEMS });
+                }
+            });
+            dispatch({ type: ItemActionTypes.REQUEST_ITEMS });
+        }
+    };
+}
+// Load one item
+export function requestItem(itemId) {
+    return (dispatch, getState) => {
+        const appState = getState();
+        if (appState && appState.items) {
+            Get(`api/items/${itemId}`)
+                .then(res => {
+                if (res.isOk) {
+                    let data = [res.data];
+                    dispatch({ type: ItemActionTypes.RECEIVE_ITEMS, items: data });
+                }
+                else {
+                    dispatch({ type: ItemActionTypes.FAILED_RECEIVE_ITEMS });
+                }
             });
             dispatch({ type: ItemActionTypes.REQUEST_ITEMS });
         }

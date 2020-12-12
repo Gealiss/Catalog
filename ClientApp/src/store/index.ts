@@ -1,5 +1,5 @@
-import * as WeatherForecasts from './WeatherForecasts';
 import * as Counter from './Counter';
+import * as Filter from './Filter';
 //import * as Items from './Items';
 
 // ITEMS
@@ -25,7 +25,7 @@ import { ShopsReducer } from './shops/reducer';
 // The top-level state object
 export interface ApplicationState {
     counter: Counter.CounterState | undefined;
-    weatherForecasts: WeatherForecasts.WeatherForecastsState | undefined;
+    filter: Filter.FilterState | undefined;
     items: ItemsState | undefined;
     user: UserState | undefined;
     alert: AlertState | undefined;
@@ -38,7 +38,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
     counter: Counter.reducer,
-    weatherForecasts: WeatherForecasts.reducer,
+    filter: Filter.reducer,
     items: ItemsReducer,
     user: UserReducer,
     alert: AlertReducer,

@@ -31,12 +31,9 @@ interface AppProps {
 }
 
 class App extends React.PureComponent<AppProps & React.ReactNode> {
-    public componentWillMount() {
-        this.props.itemActions.requestItems();
+    public componentDidMount() {
         this.props.categoryActions.requestCategories();
         this.props.shopActions.requestShops();
-    }
-    public componentDidMount() {
         this.props.userActions.checkToken();
     }
     public render() {
@@ -50,7 +47,6 @@ class App extends React.PureComponent<AppProps & React.ReactNode> {
                     <Route path='/register' component={Register} />
                     <Route path='/admin' component={AdminPanel} />
                     <Route path='/item/:itemId' component={ItemPage} />
-
                 </Container>
             </>
         );

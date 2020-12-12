@@ -11,6 +11,6 @@ export var ItemActionTypes;
 (function (ItemActionTypes) {
     ItemActionTypes["REQUEST_ITEMS"] = "REQUEST_ITEMS";
     ItemActionTypes["RECEIVE_ITEMS"] = "RECEIVE_ITEMS";
-    ItemActionTypes["CREATE_ITEM"] = "CREATE_ITEM";
+    ItemActionTypes["FAILED_RECEIVE_ITEMS"] = "FAILED_RECEIVE_ITEMS";
 })(ItemActionTypes || (ItemActionTypes = {}));
 //# sourceMappingURL=types.js.map

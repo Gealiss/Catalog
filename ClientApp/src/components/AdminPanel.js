@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Card, CardBody, CardSubtitle, CardTitle, Col, Row } from 'reactstrap';
+import { Card, CardBody, CardSubtitle, CardTitle, Col, Row, Spinner } from 'reactstrap';
 import { AddItemModal } from './modals/AddItemModal';
 import { AddCategoryModal } from './modals/AddCategoryModal';
 import { AddShopModal } from './modals/AddShopModal';
@@ -9,16 +9,28 @@ import UpdateItemModal from './modals/UpdateItemModal';
 import UpdateShopModal from './modals/UpdateShopModal';
 import UpdateCategoryModal from './modals/UpdateCategoryModal';
 import AddPriceModal from './modals/AddPriceModal';
+import * as ItemActionCreators from '../store/items/actions';
 import { UserRoles } from '../store/user/types';
 class AdminPanel extends React.Component {
     constructor(props) {
         super(props);
+    }
+    componentDidMount() {
+        // Load all items to state and props
+        this.props.requestItems();
     }
     render() {
         var _a;
         // Check if user state exist and user role is admin
         if (((_a = this.props.user) === null || _a === void 0 ? void 0 : _a.role) !== UserRoles.Admin) {
             return React.createElement(Redirect, { to: "/" });
+        }
+        // If items, shops or categories is still loading
+        if (this.props.isLoading || this.props.isShopsLoading || this.props.isCategoriesLoading) {
+            return React.createElement(React.Fragment, null,
+                " Loading data... ",
+                React.createElement(Spinner, { size: "xl", color: "primary" }),
+                " ");
         }
         return (React.createElement(React.Fragment, null,
             React.createElement("h1", null, "Admin panel"),
@@ -47,5 +59,5 @@ class AdminPanel extends React.Component {
                             React.createElement(UpdateCategoryModal, null)))))));
     }
 }
-export default connect((state) => state.user)(AdminPanel);
+export default connect((state) => (Object.assign(Object.assign(Object.assign(Object.assign({}, state.user), state.items), state.shops), state.categories)), ItemActionCreators)(AdminPanel);
 //# sourceMappingURL=AdminPanel.js.map
