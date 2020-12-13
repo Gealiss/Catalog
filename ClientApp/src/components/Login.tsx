@@ -28,7 +28,6 @@ class Login extends React.PureComponent<LoginProps, LoginState> {
 
     public handleLogin() {
         let loginData: LoginModel = { username: this.state.username, password: this.state.password };
-        console.log(loginData);
         this.props.loginUser(loginData);
     }
 

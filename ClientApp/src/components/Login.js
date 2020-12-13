@@ -12,7 +12,6 @@ class Login extends React.PureComponent {
     }
     handleLogin() {
         let loginData = { username: this.state.username, password: this.state.password };
-        console.log(loginData);
         this.props.loginUser(loginData);
     }
     handleChange(e) {

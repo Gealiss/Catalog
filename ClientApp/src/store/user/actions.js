@@ -10,7 +10,6 @@ export function loginUser(_loginData) {
             // Send login request with provided user's details (username, password)
             Post('auth/login', _loginData)
                 .then((res) => {
-                console.log("All response", res);
                 // Alerts object
                 let alerts = [];
                 if (res.isOk) {
@@ -43,7 +42,6 @@ export function registerUser(_regData) {
         if (appState && appState.user && appState.user.user == null) {
             Post('auth/register', _regData)
                 .then((res) => {
-                console.log("All response", res);
                 // Alerts object
                 let alerts = [];
                 if (res.isOk) {

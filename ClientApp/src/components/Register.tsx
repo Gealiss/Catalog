@@ -26,7 +26,6 @@ class Register extends React.PureComponent<RegisterProps, RegisterModel> {
         if (regData.email == '') {
             regData.email = undefined;
         }
-        console.log(regData);
         this.props.registerUser(regData);
     }
 

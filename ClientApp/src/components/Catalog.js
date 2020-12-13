@@ -15,7 +15,6 @@ class Catalog extends React.PureComponent {
     // This method is called when the component is first added to the document
     componentDidMount() {
         this._isMounted = true;
-        console.log("Catalog did mount");
         this.props.resetCounter();
         this.props.resetFilter();
         this.props.requestItems();
@@ -25,7 +24,6 @@ class Catalog extends React.PureComponent {
         //this.ensureDataFetched();
     }
     render() {
-        console.log("RENDER");
         // If shops or categories is still loading
         if (this.props.isShopsLoading || this.props.isCategoriesLoading) {
             return (React.createElement(React.Fragment, null,
@@ -44,13 +42,11 @@ class Catalog extends React.PureComponent {
                 React.createElement(LoadCounter, null))));
     }
     renderItems() {
-        console.log("all items:", this.props.items, this.props.isLoading);
         if (this.props.items.length === 0) {
             return React.createElement("h5", null, "No items found...");
         }
         // Get first N items from items state
         let itemsToRender = this.props.items.slice(0, this.props.count);
-        console.log("to render:", itemsToRender);
         return (React.createElement("div", { className: "row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5" }, itemsToRender.map((item) => React.createElement(ItemComponent, { item: item, key: item.id }))));
     }
 }

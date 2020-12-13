@@ -4,7 +4,6 @@
 export interface ItemsState {
     isLoading: boolean;
     items: Item[];
-    itemsCount: number;
 }
 
 export interface Item {

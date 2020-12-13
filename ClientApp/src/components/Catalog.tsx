@@ -31,7 +31,6 @@ class Catalog extends React.PureComponent<ItemProps> {
     // This method is called when the component is first added to the document
     public componentDidMount() {
         this._isMounted = true;
-        console.log("Catalog did mount");
         this.props.resetCounter();
         this.props.resetFilter();
         this.props.requestItems();
@@ -43,7 +42,6 @@ class Catalog extends React.PureComponent<ItemProps> {
     }
 
     public render() {
-        console.log("RENDER");
         // If shops or categories is still loading
         if (this.props.isShopsLoading || this.props.isCategoriesLoading) {
             return (
@@ -76,13 +74,11 @@ class Catalog extends React.PureComponent<ItemProps> {
     }
 
     private renderItems() {
-        console.log("all items:", this.props.items, this.props.isLoading);
         if (this.props.items.length === 0) {
             return <h5>No items found...</h5>;
         }
         // Get first N items from items state
         let itemsToRender: Item[] = this.props.items.slice(0, this.props.count);
-        console.log("to render:", itemsToRender);
         return (
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5">
                 {itemsToRender.map((item: Item) =>

@@ -115,11 +115,11 @@ class UpdateItemModal extends React.Component<UpdateItemModalProps, UpdateItemMo
 
                         <Label for="itemDescriptionInput">Item description:</Label>
                         <Input type="text" name="description" id="itemDescriptionInput"
-                            value={this.state.item.description} onChange={e => this.handleChange(e)} />
+                            value={this.state.item.description || ''} onChange={e => this.handleChange(e)} />
 
                         <Label for="itemImgInput">Item image URL:</Label>
                         <Input type="text" name="img" id="itemImgInput"
-                            value={this.state.item.img} onChange={e => this.handleChange(e)} />
+                            value={this.state.item.img || ''} onChange={e => this.handleChange(e)} />
                     </ModalBody>
                     <ModalFooter>
                         {
