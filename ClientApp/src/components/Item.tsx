@@ -42,14 +42,14 @@ export class ItemComponent extends React.Component<ItemComponentProps, ItemCompo
                         <img src={img} className="card-img-top" alt="..."></img>
                         <div className="card-body">
                             <Link to={`item/${this.props.item.id}`}>
-                                <h5 className="card-title">{this.props.item.name}</h5>
+                                <h5 className="card-title text-truncate">{this.props.item.name}</h5>
                             </Link>
                             {
                                 this.state.itemPrice?.availability
                                     ? <Badge color="success">In stock</Badge>
                                     : <Badge color="secondary">Out of stock</Badge>
                             }
-                            <p className="card-text">{this.props.item.description}</p>
+                            <p className="card-text text-truncate">{this.props.item.description}</p>
                         </div>
                         <div className="card-footer">
                             <Row>

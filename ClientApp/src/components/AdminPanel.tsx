@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Col, Row, Spinner } from 'reactstrap';
 
-import { AddItemModal } from './modals/AddItemModal';
+import AddItemModal from './modals/AddItemModal';
 import { AddCategoryModal } from './modals/AddCategoryModal';
 import { AddShopModal } from './modals/AddShopModal';
 import UpdateItemModal from './modals/UpdateItemModal';

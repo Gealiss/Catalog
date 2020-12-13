@@ -27,10 +27,10 @@ export class ItemComponent extends React.Component {
                     React.createElement("img", { src: img, className: "card-img-top", alt: "..." }),
                     React.createElement("div", { className: "card-body" },
                         React.createElement(Link, { to: `item/${this.props.item.id}` },
-                            React.createElement("h5", { className: "card-title" }, this.props.item.name)),
+                            React.createElement("h5", { className: "card-title text-truncate" }, this.props.item.name)),
                         ((_a = this.state.itemPrice) === null || _a === void 0 ? void 0 : _a.availability) ? React.createElement(Badge, { color: "success" }, "In stock")
                             : React.createElement(Badge, { color: "secondary" }, "Out of stock"),
-                        React.createElement("p", { className: "card-text" }, this.props.item.description)),
+                        React.createElement("p", { className: "card-text text-truncate" }, this.props.item.description)),
                     React.createElement("div", { className: "card-footer" },
                         React.createElement(Row, null,
                             React.createElement(Col, null,

@@ -39,10 +39,12 @@ namespace Catalog.Controllers
 
             List<Item> resultItems = items;
 
-            // Filter items by name
+            // Filter items by name (toLower both values)
             if(filter.Name.Length != 0)
             {
-                resultItems = items.FindAll(i => i.Name.ToLower().Contains(filter.Name));
+                resultItems = items.FindAll(i => i.Name.ToLower().Contains(
+                    filter.Name.ToLower())
+                );
             }
             // Filter items by categories
             if (filter.CategoriesId.Length > 0)

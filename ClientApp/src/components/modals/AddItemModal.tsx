@@ -1,8 +1,11 @@
 ﻿import * as React from 'react';
+import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Spinner, Alert } from 'reactstrap';
 import { AlertItem } from '../AlertItem';
 
+import { ApplicationState } from 'src/store/index';
 import { Item, ItemModelErrors } from 'src/store/items/types';
+import { CategoriesState } from 'src/store/categories/types';
 import { parseItemErrors } from 'src/store/items/actions';
 import * as AlertTypes from 'src/store/alert/types';
 import { Get, Post } from 'src/utils/apiFetch';
@@ -11,14 +14,12 @@ interface AddItemModalState {
     isActionPending: boolean;
     isOpened: boolean;
     alerts: AlertTypes.Alert[] | null;
-    id: string;
-    name: string;
-    category_name: string;
-    description: string;
-    img: string;
+    item: Item;
 }
 
-export class AddItemModal extends React.Component<{}, AddItemModalState> {
+type UpdateItemModalProps = CategoriesState;
+
+class AddItemModal extends React.Component<UpdateItemModalProps, AddItemModalState> {
     constructor(props: any) {
         super(props);
 
@@ -26,7 +27,9 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
             alerts: null,
             isActionPending: false,
             isOpened: false,
-            id: '', name: '', category_name: '', description: '', img: ''
+            item: {
+                id: '', name: '', category_name: '', description: '', img: ''
+            }
         }
         this.toggle = this.toggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -41,18 +44,11 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
     handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         //Change value of edited field only, other state fields are same
-        this.setState((state) => ({ ...state, [name]: value }));
+        this.setState((state) => ({ ...state, item: { ...state.item, [name]: value } }));
     }
 
     handleSubmit() {
-        let item: Item = {
-            id: this.state.id,
-            name: this.state.name,
-            category_name: this.state.category_name,
-            description: this.state.description === '' ? undefined : this.state.description,
-            img: this.state.img === '' ? undefined : this.state.img
-        };
-        this.setState(state => ({ ...state, isActionPending: true }));
+        let item: Item = this.state.item;
         this.createItem(item);
     }
 
@@ -73,19 +69,25 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
 
                         <Label for="itemNameInput">Item name:</Label>
                         <Input type="text" name="name" id="itemNameInput" required
-                            value={this.state.name} onChange={e => this.handleChange(e)} />
+                            value={this.state.item.name} onChange={e => this.handleChange(e)} />
 
                         <Label for="itemCategoryInput">Item category:</Label>
-                        <Input type="text" name="category_name" id="itemCategoryInput" required
-                            value={this.state.category_name} onChange={e => this.handleChange(e)} />
+                        <Input type="select" name="category_name" id="itemCategoryInput"
+                            value={this.state.item.category_name} onChange={e => this.handleChange(e)}>
+                            <option value=''>Select category...</option>)
+                            {
+                                this.props.categories.map((category, i) =>
+                                    <option key={i} value={category.name}>{category.name}</option>)
+                            }
+                        </Input>
 
                         <Label for="itemDescriptionInput">Item description:</Label>
                         <Input type="text" name="description" id="itemDescriptionInput"
-                            value={this.state.description} onChange={e => this.handleChange(e)} />
+                            value={this.state.item.description} onChange={e => this.handleChange(e)} />
 
                         <Label for="itemImgInput">Item image URL:</Label>
                         <Input type="text" name="img" id="itemImgInput"
-                            value={this.state.img} onChange={e => this.handleChange(e)} />
+                            value={this.state.item.img} onChange={e => this.handleChange(e)} />
                     </ModalBody>
                     <ModalFooter>
                         {
@@ -100,6 +102,7 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
     }
 
     createItem(item: Item) {
+        this.setState(state => ({ ...state, isActionPending: true }));
         Post('api/items', item)
             .then(res => {
                 this.setState(state => ({ ...state, isActionPending: false }));
@@ -122,3 +125,7 @@ export class AddItemModal extends React.Component<{}, AddItemModalState> {
             });
     }
 }
+
+export default connect(
+    (state: ApplicationState) => ({ ...state.categories })
+)(AddItemModal);

@@ -1,17 +1,20 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Spinner } from 'reactstrap';
 import { AlertItem } from '../AlertItem';
 import { parseItemErrors } from 'src/store/items/actions';
 import * as AlertTypes from 'src/store/alert/types';
 import { Post } from 'src/utils/apiFetch';
-export class AddItemModal extends React.Component {
+class AddItemModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             alerts: null,
             isActionPending: false,
             isOpened: false,
-            id: '', name: '', category_name: '', description: '', img: ''
+            item: {
+                id: '', name: '', category_name: '', description: '', img: ''
+            }
         };
         this.toggle = this.toggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -24,17 +27,10 @@ export class AddItemModal extends React.Component {
     handleChange(e) {
         const { name, value } = e.target;
         //Change value of edited field only, other state fields are same
-        this.setState((state) => (Object.assign(Object.assign({}, state), { [name]: value })));
+        this.setState((state) => (Object.assign(Object.assign({}, state), { item: Object.assign(Object.assign({}, state.item), { [name]: value }) })));
     }
     handleSubmit() {
-        let item = {
-            id: this.state.id,
-            name: this.state.name,
-            category_name: this.state.category_name,
-            description: this.state.description === '' ? undefined : this.state.description,
-            img: this.state.img === '' ? undefined : this.state.img
-        };
-        this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: true })));
+        let item = this.state.item;
         this.createItem(item);
     }
     render() {
@@ -49,19 +45,23 @@ export class AddItemModal extends React.Component {
                         :
                             null,
                     React.createElement(Label, { for: "itemNameInput" }, "Item name:"),
-                    React.createElement(Input, { type: "text", name: "name", id: "itemNameInput", required: true, value: this.state.name, onChange: e => this.handleChange(e) }),
+                    React.createElement(Input, { type: "text", name: "name", id: "itemNameInput", required: true, value: this.state.item.name, onChange: e => this.handleChange(e) }),
                     React.createElement(Label, { for: "itemCategoryInput" }, "Item category:"),
-                    React.createElement(Input, { type: "text", name: "category_name", id: "itemCategoryInput", required: true, value: this.state.category_name, onChange: e => this.handleChange(e) }),
+                    React.createElement(Input, { type: "select", name: "category_name", id: "itemCategoryInput", value: this.state.item.category_name, onChange: e => this.handleChange(e) },
+                        React.createElement("option", { value: '' }, "Select category..."),
+                        ")",
+                        this.props.categories.map((category, i) => React.createElement("option", { key: i, value: category.name }, category.name))),
                     React.createElement(Label, { for: "itemDescriptionInput" }, "Item description:"),
-                    React.createElement(Input, { type: "text", name: "description", id: "itemDescriptionInput", value: this.state.description, onChange: e => this.handleChange(e) }),
+                    React.createElement(Input, { type: "text", name: "description", id: "itemDescriptionInput", value: this.state.item.description, onChange: e => this.handleChange(e) }),
                     React.createElement(Label, { for: "itemImgInput" }, "Item image URL:"),
-                    React.createElement(Input, { type: "text", name: "img", id: "itemImgInput", value: this.state.img, onChange: e => this.handleChange(e) })),
+                    React.createElement(Input, { type: "text", name: "img", id: "itemImgInput", value: this.state.item.img, onChange: e => this.handleChange(e) })),
                 React.createElement(ModalFooter, null,
                     this.state.isActionPending ? React.createElement(Spinner, { size: "sm", color: "primary" }) : null,
                     React.createElement(Button, { color: "primary", onClick: this.handleSubmit }, "Add"),
                     React.createElement(Button, { color: "secondary", onClick: this.toggle }, "Cancel")))));
     }
     createItem(item) {
+        this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: true })));
         Post('api/items', item)
             .then(res => {
             this.setState(state => (Object.assign(Object.assign({}, state), { isActionPending: false })));
@@ -85,4 +85,5 @@ export class AddItemModal extends React.Component {
         });
     }
 }
+export default connect((state) => (Object.assign({}, state.categories)))(AddItemModal);
 //# sourceMappingURL=AddItemModal.js.map
