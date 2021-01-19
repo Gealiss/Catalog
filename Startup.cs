@@ -124,7 +124,7 @@ namespace Catalog
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
                 HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always
+                //Secure = CookieSecurePolicy.Always
             });
 
             // Attach token from cookie to http request (header Authorization)

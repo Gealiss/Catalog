@@ -7,7 +7,10 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-    <StartupObject></StartupObject>
+    <StartupObject>Catalog.Program</StartupObject>
+    <UserSecretsId>de6af9d1-ee25-4410-afe8-1e2ac1f97f0f</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="MongoDB.Bson" Version="2.11.4" />
     <PackageReference Include="MongoDB.Driver" Version="2.11.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -43,6 +47,7 @@
     <None Remove="ClientApp\src\components\modals\AddPriceModal.tsx" />
     <None Remove="ClientApp\src\components\modals\UpdateItemModal.tsx" />
     <None Remove="ClientApp\src\components\Register.tsx" />
+    <None Remove="ClientApp\src\components\UserPage.tsx" />
     <None Remove="ClientApp\src\store\alert\actions.ts" />
     <None Remove="ClientApp\src\store\alert\reducer.ts" />
     <None Remove="ClientApp\src\store\alert\types.ts" />

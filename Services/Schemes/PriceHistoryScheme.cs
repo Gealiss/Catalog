@@ -55,7 +55,7 @@ namespace Catalog.Services.Schemes
             {
                 return resultPrices;
             }
-            prices = prices.OrderBy(prices => prices.DateTime).ToList();
+            prices = prices.OrderByDescending(prices => prices.DateTime).ToList();
             
             shops.ForEach(shop => {
                 // Pick first item price in this shop

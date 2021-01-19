@@ -40,6 +40,10 @@ class AddPriceModal extends React.Component {
         this.setState((state) => (Object.assign(Object.assign({}, state), { price: Object.assign(Object.assign({}, state.price), { [name]: value }) })));
     }
     handleSubmit() {
+        if (this.state.price.item_id.length !== 24) {
+            alert("Item Id must be 24 chars long");
+            return;
+        }
         if (this.state.price.shop_id === '') {
             alert("Please, select a shop");
             return;

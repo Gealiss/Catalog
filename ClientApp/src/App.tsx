@@ -12,6 +12,7 @@ import NavMenu from './components/NavMenu';
 import { AlertBox } from './components/AlertBox';
 import AdminPanel from './components/AdminPanel';
 import ItemPage from './components/ItemPage';
+import UserPage from './components/UserPage';
 import { ApplicationState } from './store/index';
 
 import * as UserActionCreators from './store/user/actions';
@@ -47,6 +48,7 @@ class App extends React.PureComponent<AppProps & React.ReactNode> {
                     <Route path='/register' component={Register} />
                     <Route path='/admin' component={AdminPanel} />
                     <Route path='/item/:itemId' component={ItemPage} />
+                    <Route exact path='/user' component={UserPage} />
                 </Container>
             </>
         );

@@ -60,6 +60,10 @@ class AddPriceModal extends React.Component<AddPriceModalProps, AddPriceModalSta
     }
 
     handleSubmit() {
+        if (this.state.price.item_id.length !== 24) {
+            alert("Item Id must be 24 chars long");
+            return;
+        }
         if (this.state.price.shop_id === '') {
             alert("Please, select a shop");
             return;

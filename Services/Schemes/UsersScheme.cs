@@ -65,9 +65,6 @@ namespace Catalog.Services.Schemes
 
         public User Login(LoginModel model)
         {
-            byte[] salt;
-            string passHash = Crypto.HashPassword(model.Password, out salt);
-
             User user = users.Find(user => user.Username == model.Username).FirstOrDefault();
             if(user != null)
             {

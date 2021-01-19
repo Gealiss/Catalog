@@ -42,8 +42,11 @@ export class NavMenu extends React.PureComponent {
                                         React.createElement(NavItem, null,
                                             React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/register" }, "Register")))
                                 :
-                                    React.createElement(NavItem, null,
-                                        React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/", onClick: () => this.props.logoutUser() }, "Logout")),
+                                    React.createElement(React.Fragment, null,
+                                        React.createElement(NavItem, null,
+                                            React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/user" }, "Profile")),
+                                        React.createElement(NavItem, null,
+                                            React.createElement(NavLink, { tag: Link, className: "text-dark", to: "/", onClick: () => this.props.logoutUser() }, "Logout"))),
                             this.props.isUserLoading
                                 ?
                                     React.createElement(Spinner, { color: "dark" })

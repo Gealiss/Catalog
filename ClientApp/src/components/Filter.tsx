@@ -62,7 +62,13 @@ class Filter extends React.Component<FilterProps, FilterState>{
     handleCheckBox(e: React.SyntheticEvent<HTMLInputElement, Event>) {
         const { name, value } = e.currentTarget;
 
-        let arr: string[] = this.state[name] as string[];
+        // TO FIX
+        let arr: string[] = [];
+        if (name === "categoriesId") {
+            arr = this.state.categoriesId ? this.state.categoriesId : [];
+        } else if (name === "shopsId") {
+            arr = this.state.shopsId ? this.state.shopsId : [];
+        }
 
         // If elem was unchecked - delete its value from array
         if (!e.currentTarget.checked) {
@@ -107,6 +113,7 @@ class Filter extends React.Component<FilterProps, FilterState>{
                     </Card>
                 </UncontrolledCollapse>
 
+                <h5>Sort by shops:</h5>
                 <Button outline block color="secondary" id="togglerShops">Shops</Button>
                 <UncontrolledCollapse toggler="#togglerShops">
                     <Card>

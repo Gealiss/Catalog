@@ -47,7 +47,14 @@ class Filter extends React.Component {
     }
     handleCheckBox(e) {
         const { name, value } = e.currentTarget;
-        let arr = this.state[name];
+        // TO FIX
+        let arr = [];
+        if (name === "categoriesId") {
+            arr = this.state.categoriesId ? this.state.categoriesId : [];
+        }
+        else if (name === "shopsId") {
+            arr = this.state.shopsId ? this.state.shopsId : [];
+        }
         // If elem was unchecked - delete its value from array
         if (!e.currentTarget.checked) {
             arr = arr.filter(e => e !== value);
@@ -75,6 +82,7 @@ class Filter extends React.Component {
                             React.createElement(Input, { value: category.name, type: "checkbox", name: "categoriesId", onChange: e => this.handleCheckBox(e) }),
                             ' ',
                             category.name)))))),
+            React.createElement("h5", null, "Sort by shops:"),
             React.createElement(Button, { outline: true, block: true, color: "secondary", id: "togglerShops" }, "Shops"),
             React.createElement(UncontrolledCollapse, { toggler: "#togglerShops" },
                 React.createElement(Card, null,

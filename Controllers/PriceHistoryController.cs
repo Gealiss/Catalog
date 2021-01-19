@@ -91,6 +91,14 @@ namespace Catalog.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if item exists
+                var item = _dbService.Items.Get(price.Item_id);
+                if (item == null)
+                {
+                    ModelState.AddModelError("Item_id", "Such item does not exist.");
+                    return BadRequest(ModelState);
+                }
+
                 _dbService.PriceHistory.Create(price);
 
                 return CreatedAtRoute("GetPriceHistory", new { id = price.Id.ToString() }, price);
